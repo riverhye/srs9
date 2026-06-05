@@ -12,6 +12,7 @@ results first**. Defer setup/infra until the stage that needs it.
 | **Primary goal** | Polish résumé / portfolio as a developer (branding is secondary) |
 | **Stack** | Next.js 16 (App Router), package manager **pnpm** |
 | **Blog** | **Custom CMS (DB-based)** ⭐ — log in, write in the browser, upload images, publish. Posts in D1, images in R2. This is the full-stack proof piece. |
+| **Editor** | **WYSIWYG (Tiptap v3)** — Notion-style; `**`/buttons/shortcuts all work. Body stored as **Tiptap JSON**. **Build the editor UI first** (before DB/auth) as the core authoring experience. Admin route is **`/stella`** (shared, owner only). |
 | **Deploy** | Cloudflare (Workers + D1 + R2). Migrate to AWS *later* as an infra-learning project. |
 | **Design** | "Clean + accent" — Brunch-like base with 별·흐름·9 motif accents |
 | **Font** | Noto Sans KR for body (Korean readability) |
@@ -31,7 +32,7 @@ me.srs9.com   ── personal interests
   filter chips: [all] essay · book · movie · exhibition   (category = tag)
   /[slug]      post detail (stage 3)
 
-/admin         author / manage posts (login, owner only) — shared
+/stella        author / manage posts (login, owner only) — shared
 
 Implementation: one Next app + middleware host routing (dev.*→/dev, me.*→/me)
 Shared:         design system · CMS · D1 (posts) · R2 (images) · auth
@@ -61,24 +62,36 @@ See `docs/CONVENTIONS.md` for coding conventions.
 - [ ] Projects section (role · stack · outcome · links)
 
 ### ⬜ 3. Custom CMS blog ⭐ (full-stack proof)
-> Large; split read → write so the site can go live without waiting on the editor.
+> Large; build in slices. **Editor UI first** (most visible / the proof piece),
+> then the read side to go live, then wire up persistence + auth last.
 
-**3a. Read side (go live here)**
-- [ ] DB schema (post: title, body, category/tags, date, slug, status…) — D1 + Drizzle ORM
-- [ ] Post list / detail on me (`/`, `/[slug]`), tag filtering
-- [ ] Markdown rendering (code highlight, TOC, typography)
+**3a. Editor UI ⭐ (writing experience — no infra yet)**
+- [ ] `/stella` WYSIWYG editor — Tiptap v3, body stored as **Tiptap JSON**
+- [ ] Formatting: bold · italic · underline · strike, H1–4, code, **blockquote + custom callout**, link, image, text-color, highlight
+- [ ] Input rules (`**`, `==`, `# `) + shortcuts (`Cmd+B`) + toolbar buttons — all work
+- [ ] Temporary save (localStorage + JSON output) — DB/auth deferred to 3c
+- Structure: `app/stella/`, `components/editor/` (PostEditor · Toolbar · ColorPicker), `lib/editor/` (extensions · callout)
+
+**3a progress** (updated 2026-06-05)
+- [x] **Step 1** — `/stella` route scaffold (`app/stella/layout.tsx` + `page.tsx`) + middleware bypass so `/stella` is served on any host (shared, exempt from dev/me rewrite). Verified on dev & me hosts; existing `/` routing intact.
+- [ ] Step 2 — install Tiptap v3, base editor (StarterKit, input rules, placeholder)
+- [ ] Step 3 — Toolbar · Step 4 — image + callout · Step 5 — color + highlight · Step 6 — title + temp save · Step 7 — styling
+
+**3b. Read side (go live here)**
+- [ ] DB schema (post: title, body = Tiptap JSON, category/tags, date, slug, status…) — D1 + Drizzle ORM
+- [ ] Render Tiptap JSON → HTML on me (`/`, `/[slug]`), tag filtering (code highlight, TOC, typography)
 - [ ] Seed a few posts directly in D1 → verify
 
-**3b. Write side (browser authoring)**
-- [ ] Auth — single-admin login (owner only)
-- [ ] `/admin` editor (markdown)
-- [ ] Image upload → R2 + insert into body
+**3c. Write side wiring (persist + secure)**
+- [ ] Auth — single-admin login (owner only); protect `/stella`
 - [ ] Post CRUD API (Route Handlers) + draft/publish states
+- [ ] Image upload → R2 + insert into body
 
 ### ⬜ 4. Velog curation & migration
 - [ ] Collect Velog posts → classify (dev/book/exhibition/movie/essay)
 - [ ] Prioritize by "job-search signal" → pick 10–20
 - [ ] Refine and import into CMS (or bulk-import script into D1)
+  - Note: Velog exports **markdown**, but the CMS stores **Tiptap JSON** → needs an MD → Tiptap JSON conversion step in the import script.
 - [ ] (Defer the rest to a later pass)
 
 ### ⬜ 5. (optional) View counter
@@ -100,5 +113,4 @@ See `docs/CONVENTIONS.md` for coding conventions.
 ---
 
 ## Pending decisions / TODO (Claire)
-- [ ] Rename GitHub repo `SRS9` → `srs9`? (brand consistency)
 - [ ] Work material for the dev page (experience, projects)

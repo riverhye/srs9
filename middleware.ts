@@ -18,6 +18,11 @@ export function middleware(req: NextRequest) {
   const sub = subdomainOf(host);
   const url = req.nextUrl;
 
+  // /stella(작성 페이지)는 dev/me 공용 → 호스트 라우팅 우회, 그대로 서빙
+  if (url.pathname === "/stella" || url.pathname.startsWith("/stella/")) {
+    return NextResponse.next();
+  }
+
   // apex(서브도메인 없음) → dev로 리다이렉트
   if (!sub) {
     const [bare, port] = host.split(":");
