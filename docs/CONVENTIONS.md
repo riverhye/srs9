@@ -40,6 +40,7 @@ components/
 - Identifiers / variables: English
 - Inline code comments: Korean
 - UI copy: Korean
+- Test descriptions (`describe`/`test` titles): Korean
 - Docs (`docs/*.md`): English
 
 ## 6. Folder structure
@@ -47,6 +48,7 @@ components/
 - `app/` — routes
 - `components/<kind>/` — shared UI, grouped by kind
 - `lib/` — logic & config
+- `e2e/` — Playwright e2e tests (`*.spec.ts`)
 
 ## 7. Styling — tokens (scope a)
 

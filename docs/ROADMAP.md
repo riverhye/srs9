@@ -72,9 +72,9 @@ See `docs/CONVENTIONS.md` for coding conventions.
 - [ ] Temporary save (localStorage + JSON output) — DB/auth deferred to 3c
 - Structure: `app/stella/`, `components/editor/` (PostEditor · Toolbar · ColorPicker), `lib/editor/` (extensions · callout)
 
-**3a progress** (updated 2026-06-05)
+**3a progress** (updated 2026-06-08)
 - [x] **Step 1** — `/stella` route scaffold (`app/stella/layout.tsx` + `page.tsx`) + middleware bypass so `/stella` is served on any host (shared, exempt from dev/me rewrite). Verified on dev & me hosts; existing `/` routing intact.
-- [ ] Step 2 — install Tiptap v3, base editor (StarterKit, input rules, placeholder)
+- [x] **Step 2** — Tiptap v3 (`@tiptap/react` · `@tiptap/pm` · `@tiptap/starter-kit` · `@tiptap/extensions`). Base editor in `app/stella/page.tsx` (`"use client"`, `immediatelyRender: false`); shared extension list in `lib/editor/extensions.ts` (StarterKit + Placeholder). Min editor styles in `globals.css`. Fixed Turbopack workspace-root inference via `next.config.ts` `turbopack.root` (parent `package-lock.json`). e2e harness added (`@playwright/test`, `playwright.config.ts`, `e2e/stella.spec.ts`) — 4 passing: render / placeholder / typing / markdown input rules.
 - [ ] Step 3 — Toolbar · Step 4 — image + callout · Step 5 — color + highlight · Step 6 — title + temp save · Step 7 — styling
 
 **3b. Read side (go live here)**

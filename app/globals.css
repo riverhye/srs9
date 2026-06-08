@@ -49,6 +49,19 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* stella 에디터 — 최소 스타일(본격 타이포는 Step 7). 빈 첫 문단에 placeholder 노출 */
+.prose-stella .ProseMirror {
+  outline: none;
+  line-height: 1.7;
+}
+.prose-stella .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--muted);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
 /* 흐름(River) — 흐르는 그라데이션 라인. 브랜드 포인트로 사용 */
 .river-line {
   background: linear-gradient(
