@@ -13,7 +13,7 @@ function subdomainOf(host: string): "dev" | "me" | null {
   return null;
 }
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   const host = req.headers.get("host") ?? "";
   const sub = subdomainOf(host);
   const url = req.nextUrl;

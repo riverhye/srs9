@@ -27,7 +27,8 @@ components/
 ## 3. Exports
 
 - Components use **named exports** (`export function RootHeader`).
-- Only Next.js special files (`page`, `layout`, `middleware`) use default exports.
+- Next.js route files `page` / `layout` use default exports; `proxy` uses a
+  named `proxy` export (Next 16 renamed `middleware` → `proxy`).
 
 ## 4. Naming
 
