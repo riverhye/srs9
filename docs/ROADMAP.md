@@ -32,12 +32,13 @@ me.srs9.com   ── personal interests
   filter chips: [all] essay · book · movie · exhibition   (category = tag)
   /[slug]      post detail (stage 3)
 
-/stella        author / manage posts (login, owner only) — shared
+/stella        dashboard — manage posts (login, owner only) — shared
+/stella/write  author (WYSIWYG editor) — shared
 
 Implementation: one Next app + proxy host routing (dev.*→/dev, me.*→/me)
 Shared:         design system · CMS · D1 (posts) · R2 (images) · auth
 Posts:          stored in D1 with scope (dev|me) + tags, served per host
-Local:          dev.localhost:3400 / me.localhost:3400
+Local:          dev.localhost:3001 / me.localhost:3001
 ```
 
 See `docs/CONVENTIONS.md` for coding conventions.
@@ -57,6 +58,9 @@ See `docs/CONVENTIONS.md` for coding conventions.
 - [x] dev home (single-page scroll) + me home (feed + filter chips)
 - [x] Component structure by UI kind; conventions documented
 
+**Refinements** (updated 2026-06-10)
+- [x] `SubdomainLink` — `useEffect`+`setState` → `useSyncExternalStore` (removes the React 19 "setState synchronously within an effect" cascading-render warning). SSR/hydration uses a fallback href, then swaps to the real host-based href after hydration; no hydration mismatch. e2e `subdomain-link.spec.ts` (dev → me navigation) added — passing.
+
 ### ⬜ 2. dev content (job-search core)
 - [ ] Experience section (real career material — provided by Claire)
 - [ ] Projects section (role · stack · outcome · links)
@@ -75,7 +79,9 @@ See `docs/CONVENTIONS.md` for coding conventions.
 **3a progress** (updated 2026-06-08)
 - [x] **Step 1** — `/stella` route scaffold (`app/stella/layout.tsx` + `page.tsx`) + proxy bypass so `/stella` is served on any host (shared, exempt from dev/me rewrite). Verified on dev & me hosts; existing `/` routing intact.
 - [x] **Step 2** — Tiptap v3 (`@tiptap/react` · `@tiptap/pm` · `@tiptap/starter-kit` · `@tiptap/extensions`). Base editor in `app/stella/page.tsx` (`"use client"`, `immediatelyRender: false`); shared extension list in `lib/editor/extensions.ts` (StarterKit + Placeholder). Min editor styles in `globals.css`. Fixed Turbopack workspace-root inference via `next.config.ts` `turbopack.root` (parent `package-lock.json`). e2e harness added (`@playwright/test`, `playwright.config.ts`, `e2e/stella.spec.ts`) — 4 passing: render / placeholder / typing / markdown input rules.
-- [ ] Step 3 — Toolbar · Step 4 — image + callout · Step 5 — color + highlight · Step 6 — title + temp save · Step 7 — styling
+- [x] **Step 3** — 상단 고정 Toolbar. `components/editor/Toolbar.tsx`(bold·italic·underline·strike·code, H1–4, blockquote, link) + `PostEditor.tsx`로 에디터/툴바 조합 추출; `page.tsx`는 PostEditor만 렌더. StarterKit v3에 Underline·Link가 이미 포함됨을 확인(별도 익스텐션 불필요). active 강조는 `useEditorState`로 구독, 버튼 `onMouseDown` preventDefault로 선택 유지, 링크는 prompt 토글. e2e 4개 추가(툴바 렌더 / 굵게 적용+active / H2 / 링크) — 총 8개 통과.
+- [x] **Route split** (2026-06-10) — editor moved `/stella` → **`/stella/write`** (`git mv`); `/stella` is now the **dashboard** (entry point). proxy bypasses `/stella` + all children on any host. Toolbar icon buttons split visible glyph (B/I/U/…) from descriptive `aria-label` (굵게/기울임/…). e2e repointed + dev/me host-serving + dashboard nav tests, all Given/When/Then — 14 passing.
+- [ ] Step 4 — image + callout · Step 5 — color + highlight · Step 6 — title + temp save · Step 7 — styling
 
 **3b. Read side (go live here)**
 - [ ] DB schema (post: title, body = Tiptap JSON, category/tags, date, slug, status…) — D1 + Drizzle ORM
