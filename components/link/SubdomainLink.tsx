@@ -1,7 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import type { SiteKey } from "@/lib/site";
+
+// location은 스스로 바뀌지 않으므로 구독은 no-op.
+const subscribe = () => () => {};
 
 /**
  * 다른 서브도메인(dev ↔ me)으로 가는 링크.
@@ -16,14 +19,18 @@ export function SubdomainLink({
   children: React.ReactNode;
   className?: string;
 }) {
-  const [href, setHref] = useState(`https://${to}.srs9.com`);
-
-  useEffect(() => {
-    const { protocol, host } = window.location;
-    const parts = host.split("."); // ["dev","localhost:3400"] 또는 ["dev","srs9","com"]
-    parts[0] = to;
-    setHref(`${protocol}//${parts.join(".")}`);
-  }, [to]);
+  // 외부 시스템(window.location)을 SSR-safe하게 읽는다.
+  // 서버/하이드레이션은 fallback, 하이드레이션 직후 실제 host로 교체.
+  const href = useSyncExternalStore(
+    subscribe,
+    () => {
+      const { protocol, host } = window.location;
+      const parts = host.split("."); // ["dev","localhost:3001"] 또는 ["dev","srs9","com"]
+      parts[0] = to;
+      return `${protocol}//${parts.join(".")}`;
+    },
+    () => `https://${to}.srs9.com`,
+  );
 
   return (
     <a href={href} className={className}>
