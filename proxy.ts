@@ -4,7 +4,7 @@ import { NextResponse, type NextRequest } from "next/server";
 //   dev.srs9.com/*  → 내부 /dev/*   (브라우저 URL은 그대로)
 //   me.srs9.com/*   → 내부 /me/*
 //   srs9.com/*      → dev 서브도메인으로 리다이렉트 (루트=프로)
-// 로컬: dev.localhost:3400 / me.localhost:3400
+// 로컬: dev.localhost:3001 / me.localhost:3001
 
 function subdomainOf(host: string): "dev" | "me" | null {
   const h = host.split(":")[0];
@@ -18,7 +18,7 @@ export function proxy(req: NextRequest) {
   const sub = subdomainOf(host);
   const url = req.nextUrl;
 
-  // /stella(작성 페이지)는 dev/me 공용 → 호스트 라우팅 우회, 그대로 서빙
+  // /stella(대시보드·작성 등 소유자 전용)는 dev/me 공용 → 호스트 라우팅 우회, 그대로 서빙
   if (url.pathname === "/stella" || url.pathname.startsWith("/stella/")) {
     return NextResponse.next();
   }
