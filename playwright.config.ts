@@ -1,8 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
-// e2e는 dev 서버를 대상으로 실행. 포트는 env(PORT)에서, 없으면 3400.
+// e2e는 dev 서버를 대상으로 실행. 포트는 env(PORT)에서, 없으면 3001.
 // 이미 떠 있으면 재사용.
-const PORT = process.env.PORT ?? "3400";
+const PORT = process.env.PORT ?? "3001";
 const baseURL = `http://localhost:${PORT}`;
 
 export default defineConfig({

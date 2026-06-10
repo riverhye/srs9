@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "srs9",
-  description: "별 · 흐름 · 9. Stella River Spencer.",
+  description: "Stella River Spencer.",
 };
 
 // 헤더/푸터는 서브도메인별 레이아웃(app/dev, app/me)에서 렌더.
