@@ -272,3 +272,45 @@ test.describe("/stella/write 색상·형광펜", () => {
     await expect(colored).toHaveCSS("color", "rgb(239, 68, 68)");
   });
 });
+
+// Step 6: 제목 + 임시저장(localStorage).
+test.describe("/stella/write 제목·임시저장", () => {
+  test("제목과 본문이 새로고침 후에도 복원된다", async ({ page }) => {
+    // Given: 제목과 본문을 입력해 임시저장이 표시된 상태에서
+    await page.goto("/stella/write");
+    const titleInput = page.getByRole("textbox", { name: "제목" });
+    await titleInput.fill("임시 제목");
+    const editor = page.locator(".ProseMirror");
+    await editor.click();
+    await page.keyboard.type("임시 본문");
+    await expect(page.getByText(/임시저장/)).toBeVisible();
+
+    // When: 페이지를 새로고침하면
+    await page.reload();
+
+    // Then: 제목과 본문이 draft에서 복원된다
+    await expect(page.getByRole("textbox", { name: "제목" })).toHaveValue(
+      "임시 제목",
+    );
+    await expect(page.locator(".ProseMirror")).toContainText("임시 본문");
+  });
+
+  test("제목에서 Enter를 누르면 본문으로 포커스가 이동한다", async ({
+    page,
+  }) => {
+    // Given: 제목을 입력한 상태에서
+    await page.goto("/stella/write");
+    const titleInput = page.getByRole("textbox", { name: "제목" });
+    await titleInput.click();
+    await page.keyboard.type("제목만");
+
+    // When: Enter로 포커스가 본문에 넘어간 뒤 이어서 입력하면
+    await page.keyboard.press("Enter");
+    await expect(page.locator(".ProseMirror")).toBeFocused();
+    await page.keyboard.type("본문 시작");
+
+    // Then: 이어 입력한 내용은 본문에 들어가고 제목은 그대로다
+    await expect(page.locator(".ProseMirror")).toContainText("본문 시작");
+    await expect(titleInput).toHaveValue("제목만");
+  });
+});
