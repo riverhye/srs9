@@ -72,10 +72,10 @@ See `docs/CONVENTIONS.md` for coding conventions.
 > then the read side to go live, then wire up persistence + auth last.
 
 **3a. Editor UI ⭐ (writing experience — no infra yet)**
-- [ ] `/stella` WYSIWYG editor — Tiptap v3, body stored as **Tiptap JSON**
-- [ ] Formatting: bold · italic · underline · strike, H1–4, code, **blockquote + custom callout**, link, image, text-color, highlight
-- [ ] Input rules (`**`, `==`, `# `) + shortcuts (`Cmd+B`) + toolbar buttons — all work
-- [ ] Temporary save (localStorage + JSON output) — DB/auth deferred to 3c
+- [x] `/stella` WYSIWYG editor — Tiptap v3, body stored as **Tiptap JSON**
+- [x] Formatting: bold · italic · underline · strike, H1–4, code, **blockquote + custom callout**, link, image, text-color, highlight
+- [x] Input rules (`**`, `==`, `# `) + shortcuts (`Cmd+B`) + toolbar buttons — all work
+- [x] Temporary save (localStorage + JSON output) — DB/auth deferred to 3c
 - Structure: `app/stella/`, `components/editor/` (PostEditor · Toolbar · ColorPicker), `lib/editor/` (extensions · callout)
 
 **3a progress** (updated 2026-06-08)
@@ -86,7 +86,7 @@ See `docs/CONVENTIONS.md` for coding conventions.
 - [x] **Step 4** (2026-06-11) — image + custom callout. Image via `@tiptap/extension-image` (`inline:false`); toolbar 🖼 button prompts for a URL and inserts it (real R2 upload deferred to 3c). Callout is a custom Node in `lib/editor/callout.ts` (`group:block` / `content:block+` / `defining`, `toggleCallout` = `toggleWrap`); added `@tiptap/core` as a direct dep so the command type can be augmented via `declare module "@tiptap/core"`. The star (✦) marker is drawn with `aside[data-callout]::before` CSS (kept out of the serialized HTML), with a left accent bar + surface background. Toolbar ✦ button subscribes to active state via `useEditorState`. 3 e2e added (image insert / callout wrap+active / typing inside callout) — 16 total (+1 subdomain = 17) passing.
 - [x] **Step 5** (2026-07-09) — text color + highlight. `@tiptap/extension-text-style` (TextStyle + Color, stored as inline `style` in Tiptap JSON) and `@tiptap/extension-highlight` (single-color `<mark>`, `==text==` input rule), both pinned to 3.26.0 to match core. `components/editor/ColorPicker.tsx` — 5-swatch palette + reset, outside-click close, selection preserved via `onMouseDown` preventDefault; hex values are content data, not UI tokens (noted in comment). `<mark>` styled via new `--highlight` token (translucent in dark mode to keep contrast). Toolbar 🖍 button with active state. 3 e2e added (highlight apply+active / `==` input rule / palette color apply) — 20 total passing.
 - [x] **Step 6** (2026-07-09) — title + temp save. Borderless title input above the toolbar (Enter moves focus to the body, no newline in title). Draft (`{title, content: Tiptap JSON, savedAt}`) auto-saved to localStorage (`stella:draft`) 0.5s debounced on any change; restored on load — body via `onCreate` (client-only, no hydration mismatch), title via mount effect. "임시저장 HH:MM" indicator next to the title. DB persistence replaces this in 3c. 2 e2e added (reload restore / Enter focus handoff — waits for `.ProseMirror` focus since the handoff is async) — 22 total passing.
-- [ ] Step 7 — styling
+- [x] **Step 7** (2026-07-09) — body typography. `.prose-stella` now carries the full reading typography (headings h1-h4 one step below the page title, quiet gray blockquote vs accent callout, surface-toned inline code + code blocks, lists, accent links, image margins) and is shared with the read side (3b) — editor-only rules (placeholder, selected-node outline) keep the `.ProseMirror` scope. `---` divider renders as a single ✦ (brand motif) instead of a line. Syntax highlighting deferred to 3b. **3a complete** — 22 e2e passing.
 
 **3b. Read side (go live here)**
 - [ ] DB schema (post: title, body = Tiptap JSON, category/tags, date, slug, status…) — D1 + Drizzle ORM
