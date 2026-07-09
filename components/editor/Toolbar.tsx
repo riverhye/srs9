@@ -2,9 +2,11 @@
 
 import { useEditorState, type Editor } from "@tiptap/react";
 
-// 상단 고정 툴바. StarterKit v3에 이미 포함된 명령(bold·italic·underline·
-// strike·code·heading·blockquote·link)을 버튼으로 노출한다. 새 익스텐션은
-// 추가하지 않고, input rules(`**`, `# `)·단축키(`Cmd+B`)와 함께 동작한다.
+import { ColorPicker } from "./ColorPicker";
+
+// 상단 고정 툴바. StarterKit v3 포함 명령(bold·italic·underline·strike·
+// code·heading·blockquote·link)에 형광펜(Highlight)·글자색(ColorPicker)을
+// 더해 노출한다. input rules(`**`, `==`, `# `)·단축키(`Cmd+B`)와 함께 동작한다.
 
 type ToolbarProps = {
   editor: Editor | null;
@@ -23,6 +25,7 @@ export function Toolbar({ editor }: ToolbarProps) {
       underline: !!editor?.isActive("underline"),
       strike: !!editor?.isActive("strike"),
       code: !!editor?.isActive("code"),
+      highlight: !!editor?.isActive("highlight"),
       blockquote: !!editor?.isActive("blockquote"),
       callout: !!editor?.isActive("callout"),
       link: !!editor?.isActive("link"),
@@ -93,6 +96,14 @@ export function Toolbar({ editor }: ToolbarProps) {
       >
         <span className="font-mono">{"<>"}</span>
       </ToolbarButton>
+      <ToolbarButton
+        label="형광펜"
+        isActive={active.highlight}
+        onClick={() => editor.chain().focus().toggleHighlight().run()}
+      >
+        🖍
+      </ToolbarButton>
+      <ColorPicker editor={editor} />
 
       <ToolbarDivider />
 

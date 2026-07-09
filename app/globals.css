@@ -8,6 +8,7 @@
   --border: #ececea;
   --accent: #4f46e5;
   --accent-fg: #ffffff;
+  --highlight: #fde68a;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,6 +20,8 @@
     --border: #26262c;
     --accent: #a5b4fc;
     --accent-fg: #0b0b0f;
+    /* 다크에선 반투명 — 글자 대비를 유지한 채 은은하게 깔린다 */
+    --highlight: rgba(253, 230, 138, 0.28);
   }
 }
 
@@ -60,6 +63,13 @@ body {
   float: left;
   height: 0;
   pointer-events: none;
+}
+
+/* 형광펜(<mark>) — --highlight 토큰. 글자색은 그대로 두어 대비 유지 */
+.prose-stella .ProseMirror mark {
+  background: var(--highlight);
+  color: inherit;
+  border-radius: 0.125rem;
 }
 
 /* 본문 이미지 — 폭에 맞추고 모서리만 둥글게(본격 타이포는 Step 7) */

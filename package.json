@@ -12,7 +12,9 @@
   "dependencies": {
     "@opennextjs/cloudflare": "^1.19.11",
     "@tiptap/core": "3.26.0",
+    "@tiptap/extension-highlight": "^3.26.0",
     "@tiptap/extension-image": "^3.26.0",
+    "@tiptap/extension-text-style": "^3.26.0",
     "@tiptap/extensions": "^3.26.0",
     "@tiptap/pm": "^3.26.0",
     "@tiptap/react": "^3.26.0",

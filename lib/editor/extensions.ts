@@ -1,6 +1,8 @@
 import StarterKit from "@tiptap/starter-kit";
 import { Placeholder } from "@tiptap/extensions";
 import Image from "@tiptap/extension-image";
+import { TextStyle, Color } from "@tiptap/extension-text-style";
+import Highlight from "@tiptap/extension-highlight";
 
 import { Callout } from "./callout";
 
@@ -10,6 +12,8 @@ import { Callout } from "./callout";
 // Blockquote·CodeBlock·List 등과 input rules(`**`, `# `)·키 단축키가 포함된다.
 // Image는 블록 이미지(URL). 실제 업로드(R2)는 3c에서 붙이고, 지금은 URL 입력만.
 // Callout은 별(✦) 모티프 커스텀 블록.
+// TextStyle+Color는 글자색(인라인 style로 직렬화), Highlight는 형광펜
+// (<mark>, `==텍스트==` input rule 포함 — 색은 globals.css의 --highlight 토큰).
 export const editorExtensions = [
   StarterKit,
   Placeholder.configure({
@@ -17,4 +21,7 @@ export const editorExtensions = [
   }),
   Image.configure({ inline: false }),
   Callout,
+  TextStyle,
+  Color,
+  Highlight,
 ];

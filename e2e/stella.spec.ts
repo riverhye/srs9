@@ -215,3 +215,60 @@ test.describe("/stella/write 이미지·콜아웃", () => {
     );
   });
 });
+
+// Step 5: 글자색(ColorPicker) + 형광펜(Highlight).
+test.describe("/stella/write 색상·형광펜", () => {
+  test("형광펜 버튼이 선택 텍스트에 적용되고 active로 표시된다", async ({
+    page,
+  }) => {
+    // Given: 텍스트를 입력하고 전체 선택한 상태에서
+    await page.goto("/stella/write");
+    const editor = page.locator(".ProseMirror");
+    await editor.click();
+    await page.keyboard.type("중요");
+    await page.keyboard.press("ControlOrMeta+a");
+
+    // When: 형광펜 버튼을 누르면
+    const highlightBtn = page.getByRole("button", { name: "형광펜" });
+    await highlightBtn.click();
+
+    // Then: 선택 텍스트가 mark가 되고 버튼이 active로 표시된다
+    await expect(editor.locator("mark")).toHaveText("중요");
+    await expect(highlightBtn).toHaveAttribute("aria-pressed", "true");
+  });
+
+  test("마크다운 input rule: ==텍스트==가 형광펜으로 변환된다", async ({
+    page,
+  }) => {
+    // Given: 에디터에 포커스한 상태에서
+    await page.goto("/stella/write");
+    const editor = page.locator(".ProseMirror");
+    await editor.click();
+
+    // When: "==…=="로 감싸 입력하면
+    await page.keyboard.type("==형광== 나머지");
+
+    // Then: mark로 변환된다
+    await expect(editor.locator("mark")).toHaveText("형광");
+  });
+
+  test("글자색 팔레트에서 고른 색이 선택 텍스트에 적용된다", async ({
+    page,
+  }) => {
+    // Given: 텍스트를 입력하고 전체 선택한 상태에서
+    await page.goto("/stella/write");
+    const editor = page.locator(".ProseMirror");
+    await editor.click();
+    await page.keyboard.type("컬러");
+    await page.keyboard.press("ControlOrMeta+a");
+
+    // When: 글자색 버튼으로 팔레트를 열고 빨강을 고르면
+    await page.getByRole("button", { name: "글자색", exact: true }).click();
+    await page.getByRole("button", { name: "글자색 빨강" }).click();
+
+    // Then: 선택 텍스트가 해당 색의 span이 된다 (#ef4444 = rgb(239, 68, 68))
+    const colored = editor.locator("span[style*='color']");
+    await expect(colored).toHaveText("컬러");
+    await expect(colored).toHaveCSS("color", "rgb(239, 68, 68)");
+  });
+});
