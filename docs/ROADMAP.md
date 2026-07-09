@@ -89,9 +89,21 @@ See `docs/CONVENTIONS.md` for coding conventions.
 - [x] **Step 7** (2026-07-09) — body typography. `.prose-stella` now carries the full reading typography (headings h1-h4 one step below the page title, quiet gray blockquote vs accent callout, surface-toned inline code + code blocks, lists, accent links, image margins) and is shared with the read side (3b) — editor-only rules (placeholder, selected-node outline) keep the `.ProseMirror` scope. `---` divider renders as a single ✦ (brand motif) instead of a line. Syntax highlighting deferred to 3b. **3a complete** — 22 e2e passing.
 
 **3b. Read side (go live here)**
-- [ ] DB schema (post: title, body = Tiptap JSON, category/tags, date, slug, status…) — D1 + Drizzle ORM
-- [ ] Render Tiptap JSON → HTML on me (`/`, `/[slug]`), tag filtering (code highlight, TOC, typography)
-- [ ] Seed a few posts directly in D1 → verify
+> Sliced (decided 2026-07-09) to keep visible results first and defer infra
+> one more step: render with fixtures → swap in D1 → seed & verify.
+
+**3b-1. Render pipeline (no DB yet)**
+- [ ] Local fixture posts (Tiptap JSON) as a temporary data source
+- [ ] me feed lists posts + filter chips wired to real tag filtering
+- [ ] `/[slug]` post detail — render Tiptap JSON → HTML, reusing `.prose-stella` typography from 3a Step 7
+- [ ] Code block syntax highlighting (+ optional TOC)
+
+**3b-2. D1 + Drizzle**
+- [ ] DB schema (post: title, body = Tiptap JSON, scope dev|me, tags, date, slug, status…)
+- [ ] Local D1 via wrangler; swap fixture source → DB queries (first infra step, per "defer setup until needed")
+
+**3b-3. Seed & verify**
+- [ ] Seed a few posts directly in D1 → verify feed / detail / tag filtering
 
 **3c. Write side wiring (persist + secure)**
 - [ ] Auth — single-admin login (owner only); protect `/stella`
