@@ -24,6 +24,7 @@ export function Toolbar({ editor }: ToolbarProps) {
       strike: !!editor?.isActive("strike"),
       code: !!editor?.isActive("code"),
       blockquote: !!editor?.isActive("blockquote"),
+      callout: !!editor?.isActive("callout"),
       link: !!editor?.isActive("link"),
       headings: HEADING_LEVELS.map(
         (level) => !!editor?.isActive("heading", { level }),
@@ -42,6 +43,13 @@ export function Toolbar({ editor }: ToolbarProps) {
     const url = window.prompt("링크 URL");
     if (!url) return;
     editor.chain().focus().setLink({ href: url }).run();
+  };
+
+  // 이미지 URL을 입력받아 본문에 삽입한다. 업로드(R2)는 3c에서.
+  const insertImage = () => {
+    const src = window.prompt("이미지 URL");
+    if (!src) return;
+    editor.chain().focus().setImage({ src }).run();
   };
 
   return (
@@ -108,8 +116,21 @@ export function Toolbar({ editor }: ToolbarProps) {
       >
         &ldquo;&rdquo;
       </ToolbarButton>
+      <ToolbarButton
+        label="콜아웃"
+        isActive={active.callout}
+        onClick={() => editor.chain().focus().toggleCallout().run()}
+      >
+        ✦
+      </ToolbarButton>
       <ToolbarButton label="링크" isActive={active.link} onClick={toggleLink}>
         🔗
+      </ToolbarButton>
+
+      <ToolbarDivider />
+
+      <ToolbarButton label="이미지" isActive={false} onClick={insertImage}>
+        🖼
       </ToolbarButton>
     </div>
   );

@@ -153,3 +153,65 @@ test.describe("/stella/write 툴바", () => {
     await expect(link).toHaveAttribute("href", "https://srs9.com");
   });
 });
+
+// Step 4: 이미지(URL) + 커스텀 callout(별 모티프).
+test.describe("/stella/write 이미지·콜아웃", () => {
+  test("이미지 버튼이 prompt URL로 본문에 이미지를 삽입한다", async ({
+    page,
+  }) => {
+    // Given: 에디터에 포커스한 상태에서
+    await page.goto("/stella/write");
+    const editor = page.locator(".ProseMirror");
+    await editor.click();
+
+    // When: 이미지 버튼을 누르고 prompt에 URL을 입력하면
+    page.once("dialog", (dialog) =>
+      dialog.accept("https://srs9.com/sample.png"),
+    );
+    await page.getByRole("button", { name: "이미지" }).click();
+
+    // Then: 해당 src의 이미지가 본문에 삽입된다
+    await expect(editor.locator("img")).toHaveAttribute(
+      "src",
+      "https://srs9.com/sample.png",
+    );
+  });
+
+  test("콜아웃 버튼이 블록을 callout으로 감싸고 active로 표시된다", async ({
+    page,
+  }) => {
+    // Given: 한 줄을 입력한 상태에서
+    await page.goto("/stella/write");
+    const editor = page.locator(".ProseMirror");
+    await editor.click();
+    await page.keyboard.type("중요한 메모");
+
+    // When: 콜아웃 버튼을 누르면
+    const calloutBtn = page.getByRole("button", { name: "콜아웃" });
+    await calloutBtn.click();
+
+    // Then: 해당 블록이 callout으로 감싸지고 버튼이 active로 표시된다
+    const callout = editor.locator("aside[data-callout]");
+    await expect(callout).toContainText("중요한 메모");
+    await expect(calloutBtn).toHaveAttribute("aria-pressed", "true");
+  });
+
+  test("콜아웃 안에서 이어 입력한 텍스트가 박스 안에 반영된다", async ({
+    page,
+  }) => {
+    // Given: 콜아웃으로 감싼 블록에서
+    await page.goto("/stella/write");
+    const editor = page.locator(".ProseMirror");
+    await editor.click();
+    await page.keyboard.type("첫 줄");
+    await page.getByRole("button", { name: "콜아웃" }).click();
+
+    // When: 이어서 텍스트를 입력하면
+    await page.keyboard.type(" 그리고 둘째");
+
+    // Then: 입력이 callout 박스 안에 그대로 들어간다
+    await expect(editor.locator("aside[data-callout]")).toContainText(
+      "첫 줄 그리고 둘째",
+    );
+  });
+});
