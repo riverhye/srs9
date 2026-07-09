@@ -116,6 +116,9 @@ body {
 .fade-up-delay {
   animation-delay: 0.15s;
 }
+.fade-up-delay-2 {
+  animation-delay: 0.3s;
+}
 @keyframes fade-up {
   from {
     opacity: 0;
