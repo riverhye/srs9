@@ -35,3 +35,7 @@ next-env.d.ts
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+.agents/
+.claude/
+skills-lock.json
