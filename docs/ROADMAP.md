@@ -58,7 +58,8 @@ See `docs/CONVENTIONS.md` for coding conventions.
 - [x] dev home (single-page scroll) + me home (feed + filter chips)
 - [x] Component structure by UI kind; conventions documented
 
-**Refinements** (updated 2026-06-10)
+**Refinements** (updated 2026-07-09)
+- [x] dev home hero signature — "star river": CSS-only SVG line drawing + 9 staggered ✦ stars (`components/brand/StarRiver.tsx`), hero load reveal, `prefers-reduced-motion` respected, no new deps. Fixed `scroll-mt-20py-16` class typo (section padding was never applied). Draft intro copy in place — **Claire to replace**. Added `data-scroll-behavior="smooth"` per Next 16 warning.
 - [x] `SubdomainLink` — `useEffect`+`setState` → `useSyncExternalStore` (removes the React 19 "setState synchronously within an effect" cascading-render warning). SSR/hydration uses a fallback href, then swaps to the real host-based href after hydration; no hydration mismatch. e2e `subdomain-link.spec.ts` (dev → me navigation) added — passing.
 
 ### ⬜ 2. dev content (job-search core)

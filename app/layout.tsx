@@ -26,6 +26,7 @@ export default function RootLayout({
   return (
     <html
       lang="ko"
+      data-scroll-behavior="smooth"
       className={`${notoSansKr.variable} ${geistMono.variable} h-full`}
     >
       <body className="flex min-h-full flex-col">{children}</body>

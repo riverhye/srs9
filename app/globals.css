@@ -107,3 +107,61 @@ body {
     transparent
   );
 }
+
+/* 히어로 로드 리빌 — 위로 떠오르며 페이드인 */
+.fade-up {
+  opacity: 0;
+  animation: fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.fade-up-delay {
+  animation-delay: 0.15s;
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* 별이 흐르는 강 — 강 라인이 그려진 뒤 별이 순차 등장(delay는 컴포넌트에서 지정) */
+.star-river-path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: river-draw 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards;
+}
+@keyframes river-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.star-river-star {
+  opacity: 0;
+  animation: star-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes star-rise {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* 모션 최소화 설정 존중 — 애니메이션 없이 곧바로 최종 상태 */
+@media (prefers-reduced-motion: reduce) {
+  .fade-up,
+  .star-river-star {
+    animation: none;
+    opacity: 1;
+  }
+  .star-river-path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
