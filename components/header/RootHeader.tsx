@@ -2,14 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { sites, type SiteKey } from "@/lib/site";
-import { SubdomainLink } from "@/components/link/SubdomainLink";
 
-export function RootHeader({ site }: { site: SiteKey }) {
+// 단일 도메인 상단 내비 — 사이드바 없음(volver.tistory 결). 로고는 홈으로.
+const nav = [
+  { href: "/blog", label: "Blog" },
+  { href: "/guestbook", label: "Guestbook" },
+];
+
+export function RootHeader() {
   const pathname = usePathname();
-  const conf = sites[site];
-  // middleware rewrite로 내부 경로에 /dev|/me 접두가 붙을 수 있어 제거 후 비교
-  const current = pathname.replace(/^\/(dev|me)(?=\/|$)/, "") || "/";
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
@@ -19,28 +20,15 @@ export function RootHeader({ site }: { site: SiteKey }) {
         </Link>
 
         <ul className="flex items-center gap-1 text-sm">
-          {conf.nav.map((item) => {
-            // 해시(#)는 같은 페이지 섹션으로 스크롤 — 일반 앵커로 렌더
-            if (item.href.startsWith("#")) {
-              return (
-                <li key={item.href}>
-                  <a
-                    href={item.href}
-                    className="rounded-md px-3 py-2 text-muted transition-colors hover:text-foreground"
-                  >
-                    {item.label}
-                  </a>
-                </li>
-              );
-            }
+          {nav.map((item) => {
             const active =
-              current === item.href || current.startsWith(item.href + "/");
+              pathname === item.href || pathname.startsWith(item.href + "/");
             return (
               <li key={item.href}>
                 <Link
                   href={item.href}
                   aria-current={active ? "page" : undefined}
-                  className={`rounded-md px-3 py-2 transition-colors ${
+                  className={`rounded-md px-3 py-2 font-mono transition-colors ${
                     active
                       ? "text-foreground"
                       : "text-muted hover:text-foreground"
@@ -51,14 +39,6 @@ export function RootHeader({ site }: { site: SiteKey }) {
               </li>
             );
           })}
-          <li>
-            <SubdomainLink
-              to={conf.other}
-              className="rounded-md px-3 py-2 font-mono text-muted transition-colors hover:text-foreground"
-            >
-              {conf.other} ↗
-            </SubdomainLink>
-          </li>
         </ul>
       </nav>
     </header>
