@@ -1,40 +1,28 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("/stella 진입 방식", () => {
-  for (const host of ["dev", "me"]) {
-    test(`${host} 호스트에서 /stella(대시보드)가 그대로 서빙된다`, async ({
-      page,
-    }) => {
-      // Given: dev/me 서브도메인 호스트로
-      // When: /stella(대시보드)에 접속하면
-      await page.goto(`http://${host}.localhost:3001/stella`);
-      // Then: /dev·/me로 리라이트되지 않고 대시보드가 그대로 보인다
-      await expect(page).toHaveURL(
-        new RegExp(`^http://${host}\\.localhost:3001/stella$`),
-      );
-      await expect(page.getByRole("link", { name: "글쓰기" })).toBeVisible();
-    });
+// /stella/* 는 소유자 전용(3b-5) — 각 테스트 전에 로그인.
+test.beforeEach(async ({ page }) => {
+  await page.goto("/stella/login");
+  await page.getByLabel("code").fill("stella-dev");
+  await page.getByRole("button", { name: "In" }).click();
+  await expect(page).toHaveURL(/\/stella$/);
+});
 
-    test(`${host} 호스트에서 /stella/write(에디터)가 그대로 서빙된다`, async ({
-      page,
-    }) => {
-      // Given: dev/me 서브도메인 호스트로
-      // When: /stella/write(에디터)에 접속하면
-      await page.goto(`http://${host}.localhost:3001/stella/write`);
-      // Then: 리라이트되지 않고 에디터가 그대로 렌더된다
-      await expect(page).toHaveURL(
-        new RegExp(`^http://${host}\\.localhost:3001/stella/write$`),
-      );
-      await expect(page.locator(".ProseMirror")).toBeVisible();
-    });
-  }
+test.describe("/stella 진입 방식", () => {
+  test("대시보드(/stella)가 단일 도메인에서 렌더된다", async ({ page }) => {
+    // Given/When: /stella에 접속하면
+    await page.goto("/stella");
+    // Then: 대시보드가 보인다
+    await expect(page).toHaveURL(/\/stella$/);
+    await expect(page.getByRole("link", { name: "글쓰기" })).toBeVisible();
+  });
 });
 
 test.describe("/stella/write 에디터", () => {
-  test("에디터가 렌더된다 (dev/me로 리라이트되지 않음)", async ({ page }) => {
+  test("에디터가 렌더된다", async ({ page }) => {
     // Given/When: /stella/write에 접속하면
     await page.goto("/stella/write");
-    // Then: 호스트 라우팅에 걸리지 않고 에디터가 보인다
+    // Then: 에디터가 보인다
     await expect(page).toHaveURL(/\/stella\/write$/);
     await expect(page.locator(".ProseMirror")).toBeVisible();
   });
