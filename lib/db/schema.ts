@@ -1,4 +1,4 @@
-import { sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 // 포스트. 단일 사이트라 scope 필드는 없다.
 // body는 Tiptap JSON을 문자열로 저장(SQLite엔 JSON 타입 없음), tags도 JSON 배열 문자열.
@@ -33,3 +33,17 @@ export const comments = sqliteTable("comments", {
 
 export type Comment = typeof comments.$inferSelect;
 export type NewComment = typeof comments.$inferInsert;
+
+// 방명록 — 댓글과 동일한 익명(닉+비번) 방식. parentId가 있으면 소유자 답글.
+// 소유자 답글은 passwordHash 없음(세션으로만 삭제), isOwner=true.
+export const guestbook = sqliteTable("guestbook", {
+  id: text("id").primaryKey(),
+  parentId: text("parent_id"), // 소유자 답글이면 부모 방명록 id
+  nickname: text("nickname").notNull(),
+  passwordHash: text("password_hash"), // 소유자 답글은 null
+  body: text("body").notNull(),
+  isOwner: integer("is_owner", { mode: "boolean" }).notNull().default(false),
+  createdAt: text("created_at").notNull(),
+});
+
+export type GuestbookEntry = typeof guestbook.$inferSelect;

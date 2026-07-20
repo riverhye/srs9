@@ -7,7 +7,9 @@ const baseURL = `http://localhost:${PORT}`;
 
 export default defineConfig({
   testDir: "./e2e",
-  fullyParallel: true,
+  // 로컬 D1(단일 SQLite)을 여러 스펙이 공유하므로 직렬 실행(동시 쓰기 충돌 방지).
+  fullyParallel: false,
+  workers: 1,
   use: {
     baseURL,
     trace: "on-first-retry",

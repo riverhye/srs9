@@ -115,8 +115,11 @@ See `docs/CONVENTIONS.md` for coding conventions.
 **3c. Image upload → R2** (pending)
 - [ ] Upload image → R2 + insert into body (editor 🖼 takes a URL until then)
 
-### ⬜ 4. Guestbook
-- [ ] `/guestbook` — anonymous nickname+password entries (reuse the 3b-4 comment mechanism); owner reply / moderate
+### ✅ 4. Guestbook — done 2026-07-20
+- [x] `/guestbook` — anonymous nickname+password entries (own `guestbook` table, reuses `lib/auth/password`)
+- [x] Owner reply (authenticated, `isOwner=true`, no password) + owner moderation (delete any)
+- [x] `GuestbookBoard` client component; `e2e/guestbook.spec.ts` (익명 작성 / 소유자 답글·삭제)
+> e2e now runs **serial** (`workers: 1`) — multiple specs share one local D1 (SQLite); concurrent writers caused flaky empty reads.
 
 ### ⬜ 5. Résumé / portfolio (main expansion)
 > Deferred until blog content fills; then `/` grows from blog home → résumé landing.
