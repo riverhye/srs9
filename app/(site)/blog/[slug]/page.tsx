@@ -1,0 +1,64 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+
+import {
+  getPublishedPostBySlug,
+  parseBody,
+  parseTags,
+  formatDate,
+} from "@/lib/posts";
+import { PostBody } from "@/components/post/PostBody";
+import { CommentSection } from "@/components/comment/CommentSection";
+
+// slug는 Next가 이미 퍼센트 디코딩해 넘겨준다(한글 그대로 매칭).
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getPublishedPostBySlug(
+    decodeURIComponent(slug).normalize("NFC"),
+  );
+  return { title: post?.title ?? "Blog" };
+}
+
+export default async function PostDetail({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const post = await getPublishedPostBySlug(
+    decodeURIComponent(slug).normalize("NFC"),
+  );
+  if (!post) notFound();
+  const tags = parseTags(post);
+
+  return (
+    <article className="mx-auto max-w-3xl px-6 pt-24 pb-20">
+      <header className="mb-10">
+        <div className="mb-3 flex flex-wrap items-center gap-3 text-sm text-muted">
+          <time dateTime={post.date}>{formatDate(post.date)}</time>
+          {tags.map((t) => (
+            <Link
+              key={t}
+              href={`/blog?tag=${encodeURIComponent(t)}`}
+              className="font-mono transition-colors hover:text-foreground"
+            >
+              #{t}
+            </Link>
+          ))}
+        </div>
+        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+          {post.title}
+        </h1>
+      </header>
+
+      <PostBody content={parseBody(post)} />
+
+      <CommentSection postId={post.id} />
+    </article>
+  );
+}
