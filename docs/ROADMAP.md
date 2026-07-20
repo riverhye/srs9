@@ -1,7 +1,8 @@
 # srs9 — Build Roadmap
 
-Personal site (branding + job search). Build one stage at a time, **visible
-results first**. Defer setup/infra until the stage that needs it.
+Personal site — **blog-forward**, with a job-search résumé to grow into. Build
+one stage at a time, **visible results first**. Defer setup/infra until the
+stage that needs it.
 
 ---
 
@@ -9,36 +10,32 @@ results first**. Defer setup/infra until the stage that needs it.
 
 | Topic | Decision |
 |---|---|
-| **Primary goal** | Polish résumé / portfolio as a developer (branding is secondary) |
+| **Primary goal** | A working custom blog — the full-stack **proof piece** for job search; grow the home into a résumé/portfolio landing once content fills. |
 | **Stack** | Next.js 16 (App Router), package manager **pnpm** |
-| **Blog** | **Custom CMS (DB-based)** ⭐ — log in, write in the browser, upload images, publish. Posts in D1, images in R2. This is the full-stack proof piece. |
-| **Editor** | **WYSIWYG (Tiptap v3)** — Notion-style; `**`/buttons/shortcuts all work. Body stored as **Tiptap JSON**. **Build the editor UI first** (before DB/auth) as the core authoring experience. Admin route is **`/stella`** (shared, owner only). |
+| **Domain** | **Single domain** (srs9.com), section routes — **no subdomains**. Replaces the earlier dev./me. two-subdomain plan. |
+| **Blog** | **Custom CMS (DB-based)** ⭐ — log in, write in the browser, upload images, publish. Posts in D1, images in R2. **Comments + threaded replies** on posts. |
+| **Editor** | **WYSIWYG (Tiptap v3)** — body stored as **Tiptap JSON**. Owner-only. Admin routes **`/stella`** (dashboard) + `/stella/write` (editor). |
+| **Comments / Guestbook** | **Anonymous nickname + password** (Tistory-style): anyone posts with a nickname + password, and that password edits/deletes their own entry. Owner moderates (delete any). Post *writing* stays owner-only. |
 | **Deploy** | Cloudflare (Workers + D1 + R2). Migrate to AWS *later* as an infra-learning project. |
-| **Design** | "Clean + accent" — Brunch-like base with 별·흐름·9 motif accents |
+| **Design** | "Clean + accent" — minimal/literary (ref: volver.tistory.com), top nav (no sidebar), muted tones with 별·흐름·9 motif accents. **Wider reading max-width** than the reference (readability). |
 | **Font** | Noto Sans KR for body (Korean readability) |
 | **Content** | ~100 Velog posts → **curate, do not bulk-migrate.** Bring over the 10–20 strongest first. |
 | **Privacy** | Contact info (GitHub/Email/LinkedIn) injected via `.env.local` — never in chat or git |
 
-### Site structure — 2 subdomains, 1 codebase
+### Site structure — single domain, section routes
 
 ```
-srs9.com (apex) ──redirect──▶ dev.srs9.com   (root = professional, job search first)
+srs9.com
+  /              main — 소개 랜딩. 나중에 이력서/포트폴리오로 확장.
+  /blog          글 목록 (태그 필터)
+  /blog/[slug]   글 상세 + 댓글/답글
+  /guestbook     방명록 (익명 닉네임+비밀번호)
+  /stella        대시보드 — 글 관리 (로그인, 소유자 전용)
+  /stella/write  작성 (WYSIWYG 에디터)
 
-dev.srs9.com  ── résumé / portfolio (single-page scroll)
-  /            Hero → #experience → #projects   (nav = anchors)
-
-me.srs9.com   ── personal interests
-  /            Hero + one feed
-  filter chips: [all] essay · book · movie · exhibition   (category = tag)
-  /[slug]      post detail (stage 3)
-
-/stella        dashboard — manage posts (login, owner only) — shared
-/stella/write  author (WYSIWYG editor) — shared
-
-Implementation: one Next app + proxy host routing (dev.*→/dev, me.*→/me)
-Shared:         design system · CMS · D1 (posts) · R2 (images) · auth
-Posts:          stored in D1 with scope (dev|me) + tags, served per host
-Local:          dev.localhost:3001 / me.localhost:3001
+Shared:  design system · CMS · D1 · R2 (images) · auth
+Data:    post (Tiptap JSON body · tags · status) · comment (threaded) · guestbook entry
+Local:   localhost:3001
 ```
 
 See `docs/CONVENTIONS.md` for coding conventions.
@@ -53,23 +50,24 @@ See `docs/CONVENTIONS.md` for coding conventions.
 
 ### ✅ 1. Foundation UI
 - [x] Root layout — fonts, metadata, design tokens (light/dark)
-- [x] Host routing proxy (`proxy.ts`; apex → dev; dev.*→/dev; me.*→/me)
 - [x] `RootHeader` / `RootFooter` (contact via env)
-- [x] dev home (single-page scroll) + me home (feed + filter chips)
 - [x] Component structure by UI kind; conventions documented
+> The original dev./me. two-subdomain layout (proxy host-routing, `SubdomainLink`,
+> me interests feed, dev single-page home, `StarRiver`) is **superseded by Stage 2**.
+> Design system / tokens / fonts / header-footer carry over.
 
-**Refinements** (updated 2026-07-09)
-- [x] me home polish — same treatment as dev home: hero type scale + load reveal, `StarRiver` reused as a divider between hero and feed (copy says "하나의 흐름" — motivated), top padding aligned (`pt-16 sm:pt-24`). Filter chips stay static spans until 3b wires real filtering.
-- [x] dev home hero signature — "star river": CSS-only SVG line drawing + 9 staggered ✦ stars (`components/brand/StarRiver.tsx`), hero load reveal, `prefers-reduced-motion` respected, no new deps. Fixed `scroll-mt-20py-16` class typo (section padding was never applied). Draft intro copy in place — **Claire to replace**. Added `data-scroll-behavior="smooth"` per Next 16 warning.
-- [x] `SubdomainLink` — `useEffect`+`setState` → `useSyncExternalStore` (removes the React 19 "setState synchronously within an effect" cascading-render warning). SSR/hydration uses a fallback href, then swaps to the real host-based href after hydration; no hydration mismatch. e2e `subdomain-link.spec.ts` (dev → me navigation) added — passing.
+### ✅ 2. Restructure → single domain
+> Pivot 2026-07-20: dropped the dev/me subdomain split and the personal-interests
+> feed. Single-domain, blog-forward. Route group `app/(site)` holds chrome
+> (header/footer); `/stella` opts out.
+- [x] Removed proxy host-routing + `SubdomainLink`; collapsed `app/dev` + `app/me` into `app/(site)`
+- [x] Top nav = srs9(logo→/) · Blog · Guestbook (no sidebar; volver.tistory feel)
+- [x] `/` intro landing · `/blog` list · `/blog/[slug]` detail · `/guestbook` placeholder
+- [x] Trimmed `lib/site.ts` (dropped `SiteKey`, `sites`, `interestTags`); `e2e/nav.spec.ts` added
 
-### ⬜ 2. dev content (job-search core)
-- [ ] Experience section (real career material — provided by Claire)
-- [ ] Projects section (role · stack · outcome · links)
-
-### ⬜ 3. Custom CMS blog ⭐ (full-stack proof)
-> Large; build in slices. **Editor UI first** (most visible / the proof piece),
-> then the read side to go live, then wire up persistence + auth last.
+### ⬜ 3. Blog CMS ⭐ (full-stack proof)
+> Build in slices. Editor first (done), then real persistence + CRUD, then read
+> side (go live), then comments, then auth.
 
 **3a. Editor UI ⭐ (writing experience — no infra yet)**
 - [x] `/stella` WYSIWYG editor — Tiptap v3, body stored as **Tiptap JSON**
@@ -88,52 +86,70 @@ See `docs/CONVENTIONS.md` for coding conventions.
 - [x] **Step 6** (2026-07-09) — title + temp save. Borderless title input above the toolbar (Enter moves focus to the body, no newline in title). Draft (`{title, content: Tiptap JSON, savedAt}`) auto-saved to localStorage (`stella:draft`) 0.5s debounced on any change; restored on load — body via `onCreate` (client-only, no hydration mismatch), title via mount effect. "임시저장 HH:MM" indicator next to the title. DB persistence replaces this in 3c. 2 e2e added (reload restore / Enter focus handoff — waits for `.ProseMirror` focus since the handoff is async) — 22 total passing.
 - [x] **Step 7** (2026-07-09) — body typography. `.prose-stella` now carries the full reading typography (headings h1-h4 one step below the page title, quiet gray blockquote vs accent callout, surface-toned inline code + code blocks, lists, accent links, image margins) and is shared with the read side (3b) — editor-only rules (placeholder, selected-node outline) keep the `.ProseMirror` scope. `---` divider renders as a single ✦ (brand motif) instead of a line. Syntax highlighting deferred to 3b. **3a complete** — 22 e2e passing.
 
-**3b. Read side (go live here)**
-> Sliced (decided 2026-07-09) to keep visible results first and defer infra
-> one more step: render with fixtures → swap in D1 → seed & verify.
+**3b. Backend, CRUD & comments ⭐** — done 2026-07-20 (3c R2 pending)
+> Order: DB → write/CRUD → read (go live) → comments → auth. Local D1 via OpenNext
+> (`getCloudflareContext` + `initOpenNextCloudflareForDev`) + Drizzle; migrations
+> applied with `wrangler d1 migrations apply --local`. **24 e2e passing.**
 
-**3b-1. Render pipeline (no DB yet)**
-- [ ] Local fixture posts (Tiptap JSON) as a temporary data source
-- [ ] me feed lists posts + filter chips wired to real tag filtering
-- [ ] `/[slug]` post detail — render Tiptap JSON → HTML, reusing `.prose-stella` typography from 3a Step 7
-- [ ] Code block syntax highlighting (+ optional TOC)
+**3b-1. D1 + Drizzle** ✅
+- [x] Post schema (`lib/db/schema.ts`: slug·title·body=Tiptap JSON·tags·date·status; no `scope`)
+- [x] Local D1 (`wrangler.jsonc` `DB` binding) + `getDb()` (`lib/db/index.ts`); `db:generate` / `db:migrate:local` scripts
 
-**3b-2. D1 + Drizzle**
-- [ ] DB schema (post: title, body = Tiptap JSON, scope dev|me, tags, date, slug, status…)
-- [ ] Local D1 via wrangler; swap fixture source → DB queries (first infra step, per "defer setup until needed")
+**3b-2. Write / CRUD** ✅
+- [x] Post CRUD Route Handlers (`app/api/posts`) — create / update / delete
+- [x] Editor 저장·발행 wired (`PostEditor`), draft/publish; `?id=` edit-load
+- [x] `/stella` dashboard lists posts with edit · delete (`DeletePostButton`)
 
-**3b-3. Seed & verify**
-- [ ] Seed a few posts directly in D1 → verify feed / detail / tag filtering
+**3b-3. Read side (go live)** ✅
+- [x] Render pipeline — Tiptap JSON → HTML (`components/post/PostBody.tsx`, recursive RSC, reuse `.prose-stella`)
+- [x] `/blog` lists published posts + `?tag=` filter; `/blog/[slug]` detail (NFC slug normalize for 한글)
 
-**3c. Write side wiring (persist + secure)**
-- [ ] Auth — single-admin login (owner only); protect `/stella`
-- [ ] Post CRUD API (Route Handlers) + draft/publish states
-- [ ] Image upload → R2 + insert into body
+**3b-4. Comments + replies** ✅
+- [x] Comment schema (postId·parentId·nickname·passwordHash·body·createdAt); Web Crypto PBKDF2 hash
+- [x] Anonymous nickname+password: create; delete via password; owner deletes any
+- [x] Threaded (1-level) render under each post (`CommentSection` / `CommentThread` / `CommentForm`)
 
-### ⬜ 4. Velog curation & migration
-- [ ] Collect Velog posts → classify (dev/book/exhibition/movie/essay)
-- [ ] Prioritize by "job-search signal" → pick 10–20
-- [ ] Refine and import into CMS (or bulk-import script into D1)
-  - Note: Velog exports **markdown**, but the CMS stores **Tiptap JSON** → needs an MD → Tiptap JSON conversion step in the import script.
+**3b-5. Auth** ✅
+- [x] Single-admin login (env `STELLA_PASSWORD`, HMAC-signed cookie); `/stella` + write/moderation endpoints guarded
+
+**3c. Image upload → R2** (pending)
+- [ ] Upload image → R2 + insert into body (editor 🖼 takes a URL until then)
+
+### ⬜ 4. Guestbook
+- [ ] `/guestbook` — anonymous nickname+password entries (reuse the 3b-4 comment mechanism); owner reply / moderate
+
+### ⬜ 5. Résumé / portfolio (main expansion)
+> Deferred until blog content fills; then `/` grows from blog home → résumé landing.
+- [ ] Experience section (real career material — provided by Claire)
+- [ ] Projects section (role · stack · outcome · links)
+
+### ⬜ 6. Velog curation & migration
+- [ ] Collect Velog posts → classify by topic → prioritize by "job-search signal" → pick 10–20
+- [ ] Import into CMS — Velog exports **markdown**, CMS stores **Tiptap JSON** → needs an MD → Tiptap JSON conversion step
 - [ ] (Defer the rest to a later pass)
 
-### ⬜ 5. (optional) View counter
+### ⬜ 7. (optional) View counter
 - [ ] Lightweight per-post view count via D1
 
-### ⬜ 6. Polish
-- [ ] **Scroll animation** — section transitions feel choppy now; add smooth/scroll motion
+### ⬜ 8. Polish
+- [ ] Code block syntax highlighting (deferred from 3b-3)
+- [ ] Scroll animation / smoother section transitions
 - [ ] Metadata / OG images / sitemap / robots
 - [ ] Responsive pass, dark mode finish
 - [ ] Accessibility (a11y), SEO, performance (Core Web Vitals)
 - [ ] Prettier config + format-on-save
 
-### ⬜ 7. Deploy (Cloudflare)
+### ⬜ 9. Deploy (Cloudflare)
 - [ ] `wrangler.jsonc`, `open-next.config.ts`, `next.config.ts` setup
-- [ ] Register env (contact) + D1 binding in Cloudflare dashboard
-- [ ] Connect custom domain (apex + dev/me subdomains)
+- [ ] Register env (contact) + D1 + R2 bindings in Cloudflare dashboard
+- [ ] Connect single custom domain (srs9.com)
 - [ ] Ship → portfolio URL
 
 ---
 
+## Later / tech debt
+- [ ] API 클라이언트 유틸 (`lib/api.ts`) — fetch/axios 래퍼로 라우트 호출 DRY (지금 `PostEditor`·`CommentForm`·`CommentThread`·`DeletePostButton`·`LogoutButton`·login이 각자 raw `fetch`)
+- [ ] 타입 정리 — 흩어진 타입(`PostInput`·`InitialPost`·`PublicComment`·렌더러 Mark 등) 공용 모듈로 정돈
+
 ## Pending decisions / TODO (Claire)
-- [ ] Work material for the dev page (experience, projects)
+- [ ] Career material for the résumé/portfolio expansion (Stage 5 — experience, projects)
