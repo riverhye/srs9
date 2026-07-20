@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "srs9",
+  "compatibility_date": "2025-03-01",
+  "compatibility_flags": ["nodejs_compat"],
+  // D1: 로컬 dev(next dev via OpenNext)와 wrangler d1 --local이 공유하는 바인딩.
+  // database_id는 배포(Stage 9) 때 실제 값으로 교체. --local 작업엔 placeholder면 충분.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "srs9-db",
+      "database_id": "local",
+      "migrations_dir": "drizzle"
+    }
+  ]
+}
