@@ -112,8 +112,9 @@ See `docs/CONVENTIONS.md` for coding conventions.
 **3b-5. Auth** ✅
 - [x] Single-admin login (env `STELLA_PASSWORD`, HMAC-signed cookie); `/stella` + write/moderation endpoints guarded
 
-**3c. Image upload → R2** (pending)
-- [ ] Upload image → R2 + insert into body (editor 🖼 takes a URL until then)
+**3c. Image upload → R2** ✅ — done 2026-07-20
+- [x] `POST /api/upload` (owner-only) → R2 `env.BUCKET`; `GET /api/media/[key]` 서빙; 에디터 🖼 = 파일선택 업로드
+- [x] 로컬은 miniflare R2 에뮬레이션(계정 불필요); 배포 때 실제 버킷 바인딩. 렌더러(`PostBody`)는 URL만 다뤄 수정 불필요
 
 ### ✅ 4. Guestbook — done 2026-07-20
 - [x] `/guestbook` — anonymous nickname+password entries (own `guestbook` table, reuses `lib/auth/password`)

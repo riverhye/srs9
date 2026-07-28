@@ -1,6 +1,7 @@
 "use client";
 
-import { useEditorState, type Editor } from "@tiptap/react";
+import { type Editor, useEditorState } from "@tiptap/react";
+import { useRef, useState } from "react";
 
 import { ColorPicker } from "./ColorPicker";
 
@@ -15,6 +16,10 @@ type ToolbarProps = {
 const HEADING_LEVELS = [1, 2, 3, 4] as const;
 
 export function Toolbar({ editor }: ToolbarProps) {
+  // 이미지 파일 업로드용 숨은 input
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+
   // v3에서 useEditor는 트랜잭션마다 리렌더하지 않으므로, active 상태는
   // useEditorState로 구독해 버튼 강조가 실시간 반영되게 한다.
   const active = useEditorState({
@@ -48,11 +53,28 @@ export function Toolbar({ editor }: ToolbarProps) {
     editor.chain().focus().setLink({ href: url }).run();
   };
 
-  // 이미지 URL을 입력받아 본문에 삽입한다. 업로드(R2)는 3c에서.
-  const insertImage = () => {
-    const src = window.prompt("이미지 URL");
-    if (!src) return;
-    editor.chain().focus().setImage({ src }).run();
+  // 파일을 R2에 업로드하고 받은 URL로 본문에 이미지를 삽입한다.
+  const onPickImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // 같은 파일 재선택 가능하게 초기화
+    if (!file) return;
+    setUploading(true);
+    try {
+      const form = new FormData();
+      form.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: form });
+      if (!res.ok) {
+        const j = (await res.json().catch(() => ({}))) as { error?: string };
+        alert(j.error ?? "업로드에 실패했습니다");
+        return;
+      }
+      const { url } = (await res.json()) as { url: string };
+      editor.chain().focus().setImage({ src: url }).run();
+    } catch {
+      alert("업로드에 실패했습니다");
+    } finally {
+      setUploading(false);
+    }
   };
 
   return (
@@ -140,9 +162,20 @@ export function Toolbar({ editor }: ToolbarProps) {
 
       <ToolbarDivider />
 
-      <ToolbarButton label="이미지" isActive={false} onClick={insertImage}>
+      <ToolbarButton
+        label="이미지"
+        isActive={uploading}
+        onClick={() => fileRef.current?.click()}
+      >
         🖼
       </ToolbarButton>
+      <input
+        ref={fileRef}
+        type="file"
+        accept="image/*"
+        hidden
+        onChange={onPickImage}
+      />
     </div>
   );
 }

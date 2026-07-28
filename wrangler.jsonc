@@ -12,5 +12,13 @@
       "database_id": "local",
       "migrations_dir": "drizzle"
     }
+  ],
+  // 이미지 업로드용 R2 버킷. 로컬은 miniflare 에뮬레이션(.wrangler/state).
+  // 배포(Stage 9) 때 실제 버킷을 만들고 이 이름으로 바인딩.
+  "r2_buckets": [
+    {
+      "binding": "BUCKET",
+      "bucket_name": "srs9-media"
+    }
   ]
 }

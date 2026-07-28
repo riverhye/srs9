@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 // /stella/* 는 소유자 전용(3b-5) — 각 테스트 전에 로그인.
 test.beforeEach(async ({ page }) => {
@@ -144,25 +144,34 @@ test.describe("/stella/write 툴바", () => {
 
 // Step 4: 이미지(URL) + 커스텀 callout(별 모티프).
 test.describe("/stella/write 이미지·콜아웃", () => {
-  test("이미지 버튼이 prompt URL로 본문에 이미지를 삽입한다", async ({
-    page,
-  }) => {
+  test("이미지 파일을 업로드해 본문에 삽입하고 서빙된다", async ({ page }) => {
     // Given: 에디터에 포커스한 상태에서
     await page.goto("/stella/write");
     const editor = page.locator(".ProseMirror");
     await editor.click();
 
-    // When: 이미지 버튼을 누르고 prompt에 URL을 입력하면
-    page.once("dialog", (dialog) =>
-      dialog.accept("https://srs9.com/sample.png"),
+    // When: 이미지 파일을 골라 업로드하면 (숨은 file input에 직접 세팅)
+    const png = Buffer.from(
+      "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+      "base64",
     );
-    await page.getByRole("button", { name: "이미지" }).click();
+    await page.setInputFiles('input[type="file"]', {
+      name: "t.png",
+      mimeType: "image/png",
+      buffer: png,
+    });
 
-    // Then: 해당 src의 이미지가 본문에 삽입된다
-    await expect(editor.locator("img")).toHaveAttribute(
-      "src",
-      "https://srs9.com/sample.png",
-    );
+    // Then: R2에 올라간 이미지가 /api/media/ 경로로 본문에 삽입되고
+    const img = editor.locator("img");
+    await expect(img).toHaveAttribute("src", /\/api\/media\/.+/);
+    // 그 URL이 실제로 서빙된다(200)
+    const src = (await img.getAttribute("src"))!;
+    const resp = await page.request.get(src);
+    expect(resp.status()).toBe(200);
+    // 서빙에 붙인 CSP가 <img> 렌더까지 막지는 않는다 — 실제로 그려졌는지 확인
+    await expect
+      .poll(() => img.evaluate((el: HTMLImageElement) => el.naturalWidth))
+      .toBeGreaterThan(0);
   });
 
   test("콜아웃 버튼이 블록을 callout으로 감싸고 active로 표시된다", async ({
