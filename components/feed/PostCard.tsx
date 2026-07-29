@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { type Post, excerptOf, formatDate, parseTags } from "@/lib/posts";
+import { excerptOf, formatDate, parseTags, type Post } from "@/lib/posts";
 
 // 블로그 목록 카드 — 날짜·태그·제목·발췌. 상세로 링크.
 export function PostCard({ post }: { post: Post }) {

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { getPublishedPosts, parseTags } from "@/lib/posts";
 import { PostCard } from "@/components/feed/PostCard";
+import { getPublishedPosts, parseTags } from "@/lib/posts";
 
 export const metadata: Metadata = { title: "Blog" };
 

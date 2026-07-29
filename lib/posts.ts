@@ -1,10 +1,10 @@
 import "server-only";
 
-import { and, desc, eq } from "drizzle-orm";
 import type { JSONContent } from "@tiptap/core";
+import { and, desc, eq } from "drizzle-orm";
 
 import { getDb } from "@/lib/db";
-import { posts, comments, type Post } from "@/lib/db/schema";
+import { comments, type Post, posts } from "@/lib/db/schema";
 
 export type { Post } from "@/lib/db/schema";
 
@@ -136,7 +136,7 @@ export function excerptOf(post: Post, max = 120): string {
 }
 
 function plainText(node: JSONContent): string {
-  return node.text ?? (node.content?.map(plainText).join("") ?? "");
+  return node.text ?? node.content?.map(plainText).join("") ?? "";
 }
 
 // 한글 유지, 문자/숫자 외는 -로. 비면 "post".
@@ -157,8 +157,13 @@ async function uniqueSlug(base: string): Promise<string> {
   let n = 2;
   // 충돌하면 -2, -3 … 붙인다
   while (
-    (await db.select({ id: posts.id }).from(posts).where(eq(posts.slug, slug)).limit(1))
-      .length > 0
+    (
+      await db
+        .select({ id: posts.id })
+        .from(posts)
+        .where(eq(posts.slug, slug))
+        .limit(1)
+    ).length > 0
   ) {
     slug = `${base}-${n++}`;
   }

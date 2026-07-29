@@ -1,8 +1,8 @@
 import "server-only";
 
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 // 단일 관리자 세션 — 고정 페이로드에 HMAC 서명(위조 방지)한 httpOnly 쿠키.
 // 서명 키 = STELLA_PASSWORD(.dev.vars / 배포 시 Cloudflare secret).
@@ -21,7 +21,11 @@ async function sign(value: string): Promise<string> {
     false,
     ["sign"],
   );
-  const sig = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(value));
+  const sig = await crypto.subtle.sign(
+    "HMAC",
+    key,
+    new TextEncoder().encode(value),
+  );
   return [...new Uint8Array(sig)]
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");

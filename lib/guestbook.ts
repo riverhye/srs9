@@ -2,9 +2,9 @@ import "server-only";
 
 import { asc, eq } from "drizzle-orm";
 
+import { hashPassword, verifyPassword } from "@/lib/auth/password";
 import { getDb } from "@/lib/db";
 import { guestbook, type GuestbookEntry } from "@/lib/db/schema";
-import { hashPassword, verifyPassword } from "@/lib/auth/password";
 import { brand } from "@/lib/site";
 
 // passwordHash는 절대 노출하지 않는다.

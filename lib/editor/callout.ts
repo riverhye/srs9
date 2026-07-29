@@ -1,4 +1,4 @@
-import { Node, mergeAttributes } from "@tiptap/core";
+import { mergeAttributes, Node } from "@tiptap/core";
 
 // 별(✦) 모티프를 단 Notion식 callout 블록.
 // content: block+ — 박스 안에서 문단·리스트 등 블록을 작성할 수 있다.
@@ -24,7 +24,11 @@ export const Callout = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ["aside", mergeAttributes(HTMLAttributes, { "data-callout": "" }), 0];
+    return [
+      "aside",
+      mergeAttributes(HTMLAttributes, { "data-callout": "" }),
+      0,
+    ];
   },
 
   addCommands() {

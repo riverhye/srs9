@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { RootHeader } from "@/components/header/RootHeader";
+
 import { RootFooter } from "@/components/footer/RootFooter";
+import { RootHeader } from "@/components/header/RootHeader";
 
 // 사이트(공개) 영역 공용 레이아웃 — 헤더/푸터
 export const metadata: Metadata = {

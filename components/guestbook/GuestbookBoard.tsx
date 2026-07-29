@@ -37,7 +37,7 @@ export function GuestbookBoard({
       const res = await fetch(`/api/guestbook/${entry.id}`, {
         method: "DELETE",
       });
-      if (res.ok) refresh();
+      if (res.ok) await refresh();
       return;
     }
     const password = prompt("비밀번호를 입력하세요");
@@ -47,7 +47,7 @@ export function GuestbookBoard({
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ password }),
     });
-    if (res.ok) refresh();
+    if (res.ok) await refresh();
     else alert("비밀번호가 일치하지 않습니다");
   }
 
@@ -110,7 +110,9 @@ function EntryBody({
           {entry.nickname}
           {entry.isOwner && " ✦"}
         </span>
-        <span className="text-xs text-muted">{formatWhen(entry.createdAt)}</span>
+        <span className="text-xs text-muted">
+          {formatWhen(entry.createdAt)}
+        </span>
       </div>
       <p className="mt-1 text-sm whitespace-pre-wrap">{entry.body}</p>
       <button

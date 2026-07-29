@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 import { PostEditor } from "@/components/editor/PostEditor";
-import { getPostById, parseBody, parseTags } from "@/lib/posts";
 import { requireOwner } from "@/lib/auth/session";
+import { getPostById, parseBody, parseTags } from "@/lib/posts";
 
 export const metadata: Metadata = { title: "글쓰기" };
 

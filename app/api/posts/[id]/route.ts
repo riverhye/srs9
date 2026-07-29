@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 
-import { deletePost, updatePost, type PostInput } from "@/lib/posts";
 import { isOwner } from "@/lib/auth/session";
+import { deletePost, type PostInput, updatePost } from "@/lib/posts";
+
 import { validate } from "../route";
 
 type Ctx = { params: Promise<{ id: string }> };

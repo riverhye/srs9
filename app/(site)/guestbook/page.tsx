@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
-import { listEntries } from "@/lib/guestbook";
-import { isOwner } from "@/lib/auth/session";
 import { GuestbookBoard } from "@/components/guestbook/GuestbookBoard";
+import { isOwner } from "@/lib/auth/session";
+import { listEntries } from "@/lib/guestbook";
 
 export const metadata: Metadata = { title: "Guestbook" };
 

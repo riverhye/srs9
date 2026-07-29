@@ -1,7 +1,25 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 // Stage 4: 방명록 — 방문자 익명 작성 + 소유자 답글/모더레이션.
 test.describe("방명록", () => {
+  // 로컬 D1은 실행 사이에 유지되므로, 매 테스트 전에 방명록을 비운다.
+  test.beforeEach(async ({ page }) => {
+    // 로그인이 실패하면 아래 삭제가 조용히 no-op이 되므로 여기서 잡는다.
+    const login = await page.request.post("/api/auth/login", {
+      data: { password: "stella-dev" },
+    });
+    expect(login.ok()).toBe(true);
+    const entries = (await (
+      await page.request.get("/api/guestbook")
+    ).json()) as { id: string }[];
+    // 부모를 지우면 답글도 함께 지워지므로, 이미 사라진 id는 그냥 통과한다.
+    for (const { id } of entries) {
+      await page.request.delete(`/api/guestbook/${id}`);
+    }
+    // 첫 테스트가 익명 상태로 시작하도록 정리용 세션은 닫는다.
+    await page.request.post("/api/auth/logout");
+  });
+
   test("익명으로 방명록을 남긴다", async ({ page }) => {
     // Given: 방명록 페이지에서
     await page.goto("/guestbook");

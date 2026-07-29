@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
-import { Noto_Sans_KR, Geist_Mono } from "next/font/google";
 import "./globals.css";
+
+import type { Metadata } from "next";
+import { Geist_Mono, Noto_Sans_KR } from "next/font/google";
 
 const notoSansKr = Noto_Sans_KR({
   subsets: ["latin"],

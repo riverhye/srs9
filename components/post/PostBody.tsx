@@ -43,8 +43,8 @@ function RenderNode({ node }: { node: JSONContent }): ReactNode {
       return <li>{renderNodes(node.content)}</li>;
     case "image":
       // 본문 이미지는 임의 외부 URL(R2 업로드는 3c) — next/image 대신 <img>
-      // eslint-disable-next-line @next/next/no-img-element
       return (
+        // eslint-disable-next-line @next/next/no-img-element
         <img
           src={String(node.attrs?.src ?? "")}
           alt={String(node.attrs?.alt ?? "")}

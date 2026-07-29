@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { EditorContent, type JSONContent, useEditor } from "@tiptap/react";
 import { useRouter } from "next/navigation";
-import { useEditor, EditorContent, type JSONContent } from "@tiptap/react";
+import { useEffect, useRef, useState } from "react";
 
 import { editorExtensions } from "@/lib/editor/extensions";
 
@@ -84,6 +84,8 @@ export function PostEditor({ initialPost }: { initialPost?: InitialPost }) {
     if (initialPost) return;
     const draft = readDraft();
     if (!draft) return;
+    // SSR 마크업을 유지하려면 브라우저 저장 초안은 mount 후 복원해야 한다.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTitle(draft.title);
     titleRef.current = draft.title;
     setAutoSavedAt(new Date(draft.savedAt));

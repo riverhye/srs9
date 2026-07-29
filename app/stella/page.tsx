@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { listAllPosts, formatDate } from "@/lib/posts";
 import { DeletePostButton } from "@/components/dashboard/DeletePostButton";
 import { LogoutButton } from "@/components/dashboard/LogoutButton";
 import { requireOwner } from "@/lib/auth/session";
+import { formatDate, listAllPosts } from "@/lib/posts";
 
 export const metadata: Metadata = { title: "대시보드" };
 
@@ -35,7 +35,10 @@ export default async function StellaDashboardPage() {
           <li className="py-8 text-muted">아직 글이 없습니다.</li>
         )}
         {posts.map((p) => (
-          <li key={p.id} className="flex items-center justify-between gap-4 py-4">
+          <li
+            key={p.id}
+            className="flex items-center justify-between gap-4 py-4"
+          >
             <div className="min-w-0">
               <Link
                 href={`/stella/write?id=${p.id}`}

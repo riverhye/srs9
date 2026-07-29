@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { createPost, listAllPosts, type PostInput } from "@/lib/posts";
 import { isOwner } from "@/lib/auth/session";
+import { createPost, listAllPosts, type PostInput } from "@/lib/posts";
 
 // NextResponse 본문은 1회성이라 매번 새로 만든다.
 const unauthorized = () =>
@@ -28,7 +28,8 @@ export function validate(input: Partial<PostInput>): string | null {
   if (!input || typeof input !== "object") return "잘못된 요청입니다";
   if (!input.title?.trim()) return "제목이 필요합니다";
   if (!input.body || typeof input.body !== "object") return "본문이 필요합니다";
-  if (input.tags && !Array.isArray(input.tags)) return "태그 형식이 잘못되었습니다";
+  if (input.tags && !Array.isArray(input.tags))
+    return "태그 형식이 잘못되었습니다";
   if (input.status !== "draft" && input.status !== "published")
     return "상태가 잘못되었습니다";
   return null;

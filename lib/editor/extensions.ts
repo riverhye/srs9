@@ -1,8 +1,8 @@
-import StarterKit from "@tiptap/starter-kit";
-import { Placeholder } from "@tiptap/extensions";
-import Image from "@tiptap/extension-image";
-import { TextStyle, Color } from "@tiptap/extension-text-style";
 import Highlight from "@tiptap/extension-highlight";
+import Image from "@tiptap/extension-image";
+import { Color, TextStyle } from "@tiptap/extension-text-style";
+import { Placeholder } from "@tiptap/extensions";
+import StarterKit from "@tiptap/starter-kit";
 
 import { Callout } from "./callout";
 

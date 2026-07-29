@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 // 단일 도메인 재구성(Stage 2): 상단 내비 = 로고(→/) · Blog · Guestbook.
 test.describe("단일 도메인 내비게이션", () => {

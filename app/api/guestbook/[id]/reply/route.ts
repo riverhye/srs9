@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { createOwnerReply } from "@/lib/guestbook";
 import { isOwner } from "@/lib/auth/session";
+import { createOwnerReply } from "@/lib/guestbook";
 
 // 소유자 답글 — 소유자 전용.
 export async function POST(

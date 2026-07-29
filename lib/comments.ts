@@ -2,9 +2,9 @@ import "server-only";
 
 import { asc, eq } from "drizzle-orm";
 
-import { getDb } from "@/lib/db";
-import { comments, type Comment } from "@/lib/db/schema";
 import { hashPassword, verifyPassword } from "@/lib/auth/password";
+import { getDb } from "@/lib/db";
+import { type Comment, comments } from "@/lib/db/schema";
 
 // 클라이언트로 내려보내는 공개 형태 — passwordHash는 절대 노출하지 않는다.
 export type PublicComment = {

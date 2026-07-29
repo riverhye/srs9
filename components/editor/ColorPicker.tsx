@@ -1,7 +1,7 @@
 "use client";
 
+import { type Editor, useEditorState } from "@tiptap/react";
 import { useEffect, useRef, useState } from "react";
-import { useEditorState, type Editor } from "@tiptap/react";
 
 // 본문 글자색 팔레트. UI 테마 토큰이 아니라 콘텐츠에 저장되는 값이라 hex를 쓴다
 // (Tiptap JSON에 style="color: …"로 직렬화되어 읽기 사이드에서 그대로 렌더).
