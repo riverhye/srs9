@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 // Stage 3 통합: 로그인 → 작성 → 발행 → 읽기 → 댓글 → 답글 → 삭제.
 test.describe("블로그 CMS 통합", () => {
@@ -41,7 +41,10 @@ test.describe("블로그 CMS 통합", () => {
     ).toBeVisible();
 
     // 상세로 다시 들어가 댓글 작성
-    await page.getByRole("link", { name: /E2E 통합 글/ }).first().click();
+    await page
+      .getByRole("link", { name: /E2E 통합 글/ })
+      .first()
+      .click();
     await expect(page).toHaveURL(/\/blog\/.+/);
 
     await page.getByLabel("닉네임").fill("손님");
@@ -52,7 +55,10 @@ test.describe("블로그 CMS 통합", () => {
     await expect(page.getByText("손님")).toBeVisible();
 
     // 답글 작성
-    await page.getByRole("button", { name: "답글", exact: true }).first().click();
+    await page
+      .getByRole("button", { name: "답글", exact: true })
+      .first()
+      .click();
     const replyForm = page
       .locator("form")
       .filter({ has: page.getByRole("button", { name: "답글 등록" }) });
@@ -67,5 +73,15 @@ test.describe("블로그 CMS 통합", () => {
     await page.getByRole("button", { name: "삭제" }).first().click();
     await expect(page.getByText("좋은 글이네요")).toHaveCount(0);
     await expect(page.getByText("답글 내용")).toHaveCount(0);
+
+    // 태그로 검색 — 상세의 태그 클릭 → 그 태그로 필터된 목록
+    await page.getByRole("link", { name: "#essay" }).click();
+    await expect(page).toHaveURL(/\/blog\?tag=essay$/);
+    await expect(
+      page.getByRole("link", { name: /E2E 통합 글/ }).first(),
+    ).toBeVisible();
+    // 없는 태그면 비어 있다
+    await page.goto("/blog?tag=nope");
+    await expect(page.getByText("아직 글이 없습니다.")).toBeVisible();
   });
 });

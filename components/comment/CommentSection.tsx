@@ -6,7 +6,7 @@ import { CommentThread } from "./CommentThread";
 export async function CommentSection({ postId }: { postId: string }) {
   const comments = await listComments(postId);
   return (
-    <section className="mt-16 border-t border-border pt-10">
+    <section className="mt-16">
       <h2 className="text-lg font-semibold">댓글 {comments.length}</h2>
       <CommentThread postId={postId} initialComments={comments} />
     </section>

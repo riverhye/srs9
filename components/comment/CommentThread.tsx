@@ -42,7 +42,7 @@ export function CommentThread({
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ password }),
     });
-    if (res.ok) refresh();
+    if (res.ok) await refresh();
     else alert("비밀번호가 일치하지 않습니다");
   }
 
@@ -50,15 +50,17 @@ export function CommentThread({
   const repliesOf = (id: string) => comments.filter((c) => c.parentId === id);
 
   return (
-    <div className="mt-6">
-      {topLevel.length === 0 && (
-        <p className="text-sm text-muted">첫 댓글을 남겨보세요.</p>
-      )}
+    <div>
+      <CommentForm postId={postId} onDone={refresh} />
 
-      <ul className="space-y-6">
+      <ul className="mt-8 space-y-6">
         {topLevel.map((c) => (
           <li key={c.id}>
-            <CommentBody comment={c} onReply={() => setReplyTo(c.id)} onDelete={() => remove(c.id)} />
+            <CommentBody
+              comment={c}
+              onReply={() => setReplyTo(c.id)}
+              onDelete={() => remove(c.id)}
+            />
             {replyTo === c.id && (
               <div className="mt-3 border-l-2 border-border pl-4">
                 <CommentForm postId={postId} parentId={c.id} onDone={refresh} />
@@ -76,10 +78,6 @@ export function CommentThread({
           </li>
         ))}
       </ul>
-
-      <div className="mt-8 border-t border-border pt-6">
-        <CommentForm postId={postId} onDone={refresh} />
-      </div>
     </div>
   );
 }
@@ -97,7 +95,9 @@ function CommentBody({
     <div>
       <div className="flex items-center gap-2 text-sm">
         <span className="font-medium">{comment.nickname}</span>
-        <span className="text-xs text-muted">{formatWhen(comment.createdAt)}</span>
+        <span className="text-xs text-muted">
+          {formatWhen(comment.createdAt)}
+        </span>
       </div>
       <p className="mt-1 text-sm whitespace-pre-wrap">{comment.body}</p>
       <div className="mt-1 flex gap-3 text-xs text-muted">

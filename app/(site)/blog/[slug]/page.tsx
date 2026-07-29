@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { CommentSection } from "@/components/comment/CommentSection";
+import { PostBody } from "@/components/post/PostBody";
 import {
+  formatDate,
   getPublishedPostBySlug,
   parseBody,
   parseTags,
-  formatDate,
 } from "@/lib/posts";
-import { PostBody } from "@/components/post/PostBody";
-import { CommentSection } from "@/components/comment/CommentSection";
 
 // slug는 Next가 이미 퍼센트 디코딩해 넘겨준다(한글 그대로 매칭).
 export async function generateMetadata({
@@ -45,7 +45,7 @@ export default async function PostDetail({
             <Link
               key={t}
               href={`/blog?tag=${encodeURIComponent(t)}`}
-              className="font-mono transition-colors hover:text-foreground"
+              className="rounded-full border border-border bg-surface px-2.5 py-0.5 font-mono text-xs transition-colors hover:border-accent hover:text-foreground"
             >
               #{t}
             </Link>
