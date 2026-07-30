@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # .dev.vars는 gitignore 대상. e2e가 쓰는 로그인 비번은 테스트용 고정값이고
+      # 실제 배포 비번은 Cloudflare secret이므로 여기 평문으로 둬도 무해하다.
+      - name: Write .dev.vars
+        run: printf 'NEXTJS_ENV=development\nSTELLA_PASSWORD=stella-dev\n' > .dev.vars
+
+      - run: pnpm exec tsc --noEmit
+
+      - run: pnpm lint
+
+      # e2e는 로컬 D1(miniflare)을 쓰므로 스키마를 먼저 적용한다. R2는 빈 상태로 자동 생성.
+      - run: pnpm db:migrate:local
+
+      - run: pnpm exec playwright install --with-deps chromium
+
+      - run: pnpm test:e2e
