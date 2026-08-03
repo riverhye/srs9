@@ -15,6 +15,9 @@ export type PostInput = {
   body: JSONContent;
   tags: string[];
   status: "draft" | "published";
+  // 이관용 — 넘기면 그 값을 쓴다. 없으면 제목에서 slug를, 날짜는 오늘로.
+  slug?: string;
+  date?: string; // YYYY-MM-DD
 };
 
 // --- 조회 ---
@@ -61,7 +64,11 @@ export async function getPostById(id: string): Promise<Post | undefined> {
 export async function createPost(input: PostInput): Promise<Post> {
   const db = getDb();
   const now = new Date().toISOString();
-  const slug = await uniqueSlug(slugify(input.title));
+  // 넘겨받은 slug는 원본 주소를 그대로 살리려고 slugify를 거치지 않는다
+  // (Velog slug엔 대문자·점이 있어 slugify가 바꿔버린다). NFC만 맞춘다.
+  const slug = await uniqueSlug(
+    input.slug ? input.slug.normalize("NFC") : slugify(input.title),
+  );
   const [row] = await db
     .insert(posts)
     .values({
@@ -70,7 +77,7 @@ export async function createPost(input: PostInput): Promise<Post> {
       title: input.title,
       body: JSON.stringify(input.body),
       tags: JSON.stringify(input.tags ?? []),
-      date: now.slice(0, 10),
+      date: input.date ?? now.slice(0, 10),
       status: input.status,
       createdAt: now,
       updatedAt: now,

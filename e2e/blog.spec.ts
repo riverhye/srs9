@@ -85,6 +85,69 @@ test.describe("블로그 CMS 통합", () => {
     await expect(page.getByText("아직 글이 없습니다.")).toBeVisible();
   });
 
+  // Velog 이관 — 원본 주소·발행일을 그대로 저장할 수 있어야 한다.
+  test("주소와 발행일을 지정해 글을 만들면 그 값대로 저장된다", async ({
+    page,
+  }) => {
+    // Given: 소유자로 로그인해
+    expect(
+      (
+        await page.request.post("/api/auth/login", {
+          data: { password: "stella-dev" },
+        })
+      ).ok(),
+    ).toBe(true);
+
+    // When: Velog식 주소(대문자·점 포함)와 과거 날짜를 지정해 발행하면
+    const slug = "E2E-Next.js-15-이관";
+    const res = await page.request.post("/api/posts", {
+      data: {
+        title: "E2E 이관 글",
+        tags: ["nextjs"],
+        status: "published",
+        slug,
+        date: "2024-07-11",
+        body: {
+          type: "doc",
+          content: [
+            { type: "paragraph", content: [{ type: "text", text: "본문" }] },
+          ],
+        },
+      },
+    });
+    expect(res.status()).toBe(201);
+    const post = (await res.json()) as {
+      slug: string;
+      date: string;
+      id: string;
+    };
+
+    // Then: slugify를 거치지 않고 그대로, 날짜도 지정한 값으로 저장된다
+    expect(post.slug).toBe(slug);
+    expect(post.date).toBe("2024-07-11");
+
+    // 그 주소로 실제 상세 페이지가 열린다
+    await page.goto(`/blog/${encodeURIComponent(slug)}`);
+    await expect(page.locator(".prose-stella")).toContainText("본문");
+
+    // 잘못된 값은 거부한다
+    const bad = await page.request.post("/api/posts", {
+      data: {
+        title: "x",
+        tags: [],
+        status: "draft",
+        date: "2024/07/11",
+        body: { type: "doc", content: [] },
+      },
+    });
+    expect(bad.status()).toBe(400);
+
+    // 뒷정리
+    expect((await page.request.delete(`/api/posts/${post.id}`)).ok()).toBe(
+      true,
+    );
+  });
+
   // Velog 이관 글의 비교표가 표 모양으로 나와야 한다(PostBody의 table 분기).
   test("본문의 표가 읽기 화면에서 표로 렌더된다", async ({ page }) => {
     // Given: 소유자로 로그인해

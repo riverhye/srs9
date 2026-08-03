@@ -32,5 +32,12 @@ export function validate(input: Partial<PostInput>): string | null {
     return "태그 형식이 잘못되었습니다";
   if (input.status !== "draft" && input.status !== "published")
     return "상태가 잘못되었습니다";
+  // 이관용 선택 입력 — slug가 URL을 깨거나 날짜 형식이 틀리면 거부한다.
+  if (input.slug !== undefined) {
+    if (!input.slug.trim()) return "주소가 비어 있습니다";
+    if (/[/?#\s]/.test(input.slug)) return "주소에 쓸 수 없는 문자가 있습니다";
+  }
+  if (input.date !== undefined && !/^\d{4}-\d{2}-\d{2}$/.test(input.date))
+    return "날짜 형식이 잘못되었습니다";
   return null;
 }
