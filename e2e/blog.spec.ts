@@ -83,6 +83,16 @@ test.describe("블로그 CMS 통합", () => {
     // 없는 태그면 비어 있다
     await page.goto("/blog?tag=nope");
     await expect(page.getByText("아직 글이 없습니다.")).toBeVisible();
+
+    // 뒷정리 — 로컬 D1은 실행 사이에 유지되므로 지우지 않으면 발행글이 쌓여
+    // 실제 글 목록에 테스트 글이 섞인다.
+    const all = (await (await page.request.get("/api/posts")).json()) as {
+      id: string;
+      title: string;
+    }[];
+    for (const p of all.filter((x) => x.title === "E2E 통합 글")) {
+      expect((await page.request.delete(`/api/posts/${p.id}`)).ok()).toBe(true);
+    }
   });
 
   // Velog 이관 — 원본 주소·발행일을 그대로 저장할 수 있어야 한다.

@@ -133,10 +133,12 @@ See `docs/CONVENTIONS.md` for coding conventions.
 - [x] MD → Tiptap JSON — `generateJSON` ships in the installed `@tiptap/core` but needs a DOM, and the app's extension set is TS. Solved by piping HTML through the real editor in a browser (`scripts/import-velog.mjs`): it lands in the same schema the renderer knows, so no unrenderable nodes slip in
 - [x] Images — 50 velcdn images moved to R2 (`/api/media/…`, all serving 200); 4 third-party links (Tenor·Giphy·Pinterest) left pointing at their origin rather than re-hosting someone else's asset
 - [x] Original slug + published date preserved (`PostInput.slug`/`date`); all 19 verified against source
-- [ ] Publish — imported as **draft**. Claire reviews each and publishes; 3편은 태그가 비어 있어 채워야 함
+- [x] Published — 백업 이관이라 원본 그대로 공개 상태. 대시보드도 `updatedAt` 대신 발행일 기준으로 표시·정렬(이관 글은 수정 시각이 전부 이관일이라 쓸모가 없음)
+- [ ] 태그가 빈 3편 보완 (PostgresSQL+Prisma / 프론트 아키텍처 변경 / 인텔 맥→M시리즈)
 - [ ] (Remaining 71편 — later pass, if ever)
 > Table support (Stage 6 선행) — 2편에 비교표가 있어 `TableKit` + renderer/CSS 추가.
 > Re-running the tool is safe: existing slugs are skipped and uploaded images are cached.
+> e2e가 만든 발행글이 로컬 D1에 쌓여 실제 목록에 섞였다 — `blog.spec.ts`가 뒷정리하도록 고침.
 
 ### ⬜ 7. (optional) View counter
 - [ ] Lightweight per-post view count via D1

@@ -22,9 +22,9 @@ export type PostInput = {
 
 // --- 조회 ---
 
-// 대시보드용 — 상태 무관 전체, 최근 수정순.
+// 대시보드용 — 상태 무관 전체, 발행일 내림차순(공개 목록과 같은 순서).
 export async function listAllPosts(): Promise<Post[]> {
-  return getDb().select().from(posts).orderBy(desc(posts.updatedAt));
+  return getDb().select().from(posts).orderBy(desc(posts.date));
 }
 
 // 공개 목록 — 발행글만, 날짜 내림차순. tag가 있으면 태그로 좁힌다.

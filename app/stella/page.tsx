@@ -51,7 +51,8 @@ export default async function StellaDashboardPage() {
                   {p.status === "published" ? "발행" : "초안"}
                 </span>
                 <span>·</span>
-                <time dateTime={p.updatedAt}>{formatDate(p.updatedAt)}</time>
+                {/* 수정 시각이 아니라 발행일 — 이관 글은 원본 날짜가 기준이다 */}
+                <time dateTime={p.date}>{formatDate(p.date)}</time>
               </div>
             </div>
             <div className="flex shrink-0 items-center gap-1">

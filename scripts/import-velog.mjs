@@ -278,7 +278,8 @@ for (const [i, post] of targets.entries()) {
       title: post.title,
       body: doc,
       tags: post.tags ?? [],
-      status: "draft", // 확인 후 직접 발행
+      // Velog 백업이라 원본 그대로 공개 상태로 들어간다(발행일도 원본 유지).
+      status: "published",
       slug: post.url_slug,
       date,
     },
