@@ -50,6 +50,29 @@ function RenderNode({ node }: { node: JSONContent }): ReactNode {
           alt={String(node.attrs?.alt ?? "")}
         />
       );
+    // 표 — 좁은 화면에서 넘칠 수 있어 스크롤 컨테이너로 감싼다(스타일은 globals.css).
+    case "table":
+      return (
+        <div data-table-scroll="">
+          <table>
+            <tbody>{renderNodes(node.content)}</tbody>
+          </table>
+        </div>
+      );
+    case "tableRow":
+      return <tr>{renderNodes(node.content)}</tr>;
+    case "tableHeader":
+    case "tableCell": {
+      const Cell = node.type === "tableHeader" ? "th" : "td";
+      return (
+        <Cell
+          colSpan={spanOf(node, "colspan")}
+          rowSpan={spanOf(node, "rowspan")}
+        >
+          {renderNodes(node.content)}
+        </Cell>
+      );
+    }
     case "horizontalRule":
       return <hr />;
     case "hardBreak":
@@ -57,6 +80,15 @@ function RenderNode({ node }: { node: JSONContent }): ReactNode {
     default:
       return null;
   }
+}
+
+// 셀 병합 값. 1이면 속성을 내지 않는다(기본값이라 불필요한 마크업 방지).
+function spanOf(
+  node: JSONContent,
+  key: "colspan" | "rowspan",
+): number | undefined {
+  const n = Number(node.attrs?.[key]);
+  return Number.isInteger(n) && n > 1 ? n : undefined;
 }
 
 type Mark = { type: string; attrs?: Record<string, unknown> };

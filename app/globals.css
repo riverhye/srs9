@@ -216,6 +216,41 @@ body {
   margin-bottom: 0;
 }
 
+/* 표 — 좁은 화면에서는 감싼 컨테이너가 옆으로 스크롤된다(본문은 넘치지 않게).
+   편집기(.ProseMirror)는 감싸는 div 없이 table을 직접 내므로 둘 다 대응한다. */
+.prose-stella [data-table-scroll],
+.prose-stella .ProseMirror table {
+  overflow-x: auto;
+  margin: 1.5em 0;
+}
+.prose-stella table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375em;
+}
+.prose-stella :is(th, td) {
+  padding: 0.5em 0.75em;
+  border: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+.prose-stella th {
+  background: var(--surface);
+  font-weight: 600;
+}
+/* 편집 중 선택된 셀 표시 — 표 확장이 붙이는 클래스 */
+.prose-stella .selectedCell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  opacity: 0.08;
+  pointer-events: none;
+}
+.prose-stella .ProseMirror :is(th, td) {
+  position: relative;
+}
+
 /* 흐름(River) — 흐르는 그라데이션 라인. 브랜드 포인트로 사용 */
 .river-line {
   background: linear-gradient(

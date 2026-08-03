@@ -1,0 +1,97 @@
+# Velog 글 목록 — @riverhye (89편)
+
+`구분`은 부트캠프 태그(SeSAC·코딩온·부트캠프·코딩교육·TIL) 유무로 기계적으로 나눈 것입니다.
+
+| # | 날짜 | 제목 | 태그 | 자수 | 구분 | 링크 |
+|--:|---|---|---|--:|---|---|
+| 1 | 2026-07-12 | 라이브러리 고르기 전에 생각해 볼 걸 | 의사결정 | 6,081 | 일반 | [원문](https://velog.io/@riverhye/라이브러리-고를-때-고려했다면-좋았을-것들) |
+| 2 | 2026-06-30 | 여름맞이 빌드 파일 다이어트 돌입기: font.css | build, frontend | 6,807 | 일반 | [원문](https://velog.io/@riverhye/여름맞이-빌드-파일-다이어트-돌입기-font.css) |
+| 3 | 2026-05-21 | AWS SUMMIT SEOUL 2026에 가다 | 컨퍼런스 | 8,136 | 일반 | [원문](https://velog.io/@riverhye/AWS-SUMMIT-SEOUL-2026에-가다) |
+| 4 | 2026-04-27 | 노트앱은 너로 정했다! Obsidian | obsidian | 6,978 | 일반 | [원문](https://velog.io/@riverhye/노트앱은-너로-정했다-Obsidian) |
+| 5 | 2026-01-31 | Before React: 리액트 이전의 웹 개발 | React, 기술도서 | 14,142 | 일반 | [원문](https://velog.io/@riverhye/Before-React-리액트-이전의-웹-개발) |
+| 6 | 2025-12-14 | TEOConf 2025에 가다 | 컨퍼런스, 테오콘 | 9,660 | 일반 | [원문](https://velog.io/@riverhye/TEOConf-2025에-가다) |
+| 7 | 2025-11-27 | PostgresSQL + Prisma ORM 사용법 설정 |  | 5,867 | 일반 | [원문](https://velog.io/@riverhye/PostgresSQL-Prisma-ORM-사용법-설정) |
+| 8 | 2025-10-27 | 프론트 아키텍처 변경: 지금_최선의_아키텍처_찾기 |  | 7,169 | 일반 | [원문](https://velog.io/@riverhye/프론트-프로젝트-아키텍처-변경-지금최선의아키텍처) |
+| 9 | 2025-09-28 | Github Packages로 사내 UI 라이브러리 만들기 | git, github | 5,261 | 일반 | [원문](https://velog.io/@riverhye/Github-Packages로-사내-UI-라이브러리-배포하기) |
+| 10 | 2025-07-31 | 인텔 맥에서 M시리즈(Apple Silicon)로 마이그레이션: 개발 세팅 |  | 5,746 | 일반 | [원문](https://velog.io/@riverhye/Apple-Silicon-Setting) |
+| 11 | 2025-05-06 | Next.js 15 마이그레이션 | nextjs | 4,228 | 일반 | [원문](https://velog.io/@riverhye/Next.js-15-마이그레이션) |
+| 12 | 2025-02-24 | [Next.js] 페이지 인쇄(프린트) 기능 | JavaScript, React, nextjs | 4,954 | 일반 | [원문](https://velog.io/@riverhye/Next.js-페이지-인쇄프린트-기능) |
+| 13 | 2025-01-31 | [JS] 배열 내 객체 핸들링하기 | JavaScript | 5,654 | 일반 | [원문](https://velog.io/@riverhye/JS-배열-내-객체-핸들링하기) |
+| 14 | 2024-12-08 | [JS] FormData 주고받기 | JavaScript | 4,424 | 일반 | [원문](https://velog.io/@riverhye/Next.js에서-formData-주고받기) |
+| 15 | 2024-10-31 | 맨땅에 헤딩: 새 프로젝트, 어떻게 잘할 수 있을까? | React, nextjs, shadcn/ui | 9,178 | 일반 | [원문](https://velog.io/@riverhye/맨땅에-헤딩-새-프로젝트-어떻게-잘할-수-있을까) |
+| 16 | 2024-09-16 | Rebase 넌 false가 어울려 | git | 5,500 | 일반 | [원문](https://velog.io/@riverhye/Rebase-넌-false가-어울려) |
+| 17 | 2024-07-21 | Git Conflict 해결하기 | git, github | 2,947 | 일반 | [원문](https://velog.io/@riverhye/Git-Conflict-해결하기) |
+| 18 | 2024-07-11 | [React] 새 탭으로 파일 미리보기 & 다운로드 | JavaScript, React | 9,525 | 일반 | [원문](https://velog.io/@riverhye/React-새-탭으로-파일-미리보기-다운로드) |
+| 19 | 2024-06-22 | [회고] 어쩌다 나는 프로그래밍을 하게 되었을까 |  | 5,056 | 일반 | [원문](https://velog.io/@riverhye/회고-어쩌다-나는-프로그래밍을-하게-되었을까) |
+| 20 | 2024-05-31 | 원티드 FE 프리온보딩 챌린지 사전과제 |  | 5,629 | 일반 | [원문](https://velog.io/@riverhye/원티드-FE-프리온보딩-챌린지-사전과제) |
+| 21 | 2024-05-05 | Websocket과 Socket.io 라이브러리 전격 비교 | JavaScript | 8,916 | 일반 | [원문](https://velog.io/@riverhye/Websocket과-socket.io-라이브러리-비교-정리) |
+| 22 | 2024-04-21 | [JS] 이진탐색 알고리즘 | 코딩테스트 | 6,780 | 일반 | [원문](https://velog.io/@riverhye/JS-이진탐색-알고리즘) |
+| 23 | 2024-04-14 | [JS] 배열 메서드 split과 splice | JavaScript, 코딩테스트 | 3,058 | 일반 | [원문](https://velog.io/@riverhye/JS-배열-메서드-split과-splice) |
+| 24 | 2024-04-09 | 정보를 팔로업 한다는 것 (Feat. React compiler) | React | 2,599 | 일반 | [원문](https://velog.io/@riverhye/정보를-팔로업-한다는-것-Feat.-React-compiler) |
+| 25 | 2024-04-07 | [React] localStorage로 최근 본 상품 만들기 | JavaScript, React | 4,119 | 일반 | [원문](https://velog.io/@riverhye/JS-최근-본-상품-리스트-만들기) |
+| 26 | 2024-04-05 | [Redux-toolkit] Redux 3원칙으로 알아보는 Immer draft | React, redux | 3,954 | 일반 | [원문](https://velog.io/@riverhye/Redux-toolkit-Redux-3원칙으로-알아보는-Immer-draft) |
+| 27 | 2024-03-29 | 프론트엔드 신입 첫 면접, 그리고 | 면접, 프론트엔드 | 4,723 | 일반 | [원문](https://velog.io/@riverhye/프론트엔드-신입-첫-면접-그리고) |
+| 28 | 2024-03-21 | [CodeSignal] 코딩테스트 준비 | JavaScript, 코딩테스트 | 5,012 | 일반 | [원문](https://velog.io/@riverhye/CodeSignal-palindrome) |
+| 29 | 2024-03-19 | [JS] 배열 객체 제대로 비교하기 | JavaScript, typescript | 2,932 | 일반 | [원문](https://velog.io/@riverhye/Deep-Dive-to-원시-값-vs-객체) |
+| 30 | 2024-03-09 | [공부 알림 SNS] 팀 프로젝트 회고 | React, SeSAC, nextjs, project, tailwind, typescript | 4,456 | 학습노트 | [원문](https://velog.io/@riverhye/공부-알림-SNS-팀-프로젝트-회고) |
+| 31 | 2024-02-06 | [SpringBoot] MyBatis | Java, SeSAC, Springboot | 12,320 | 학습노트 | [원문](https://velog.io/@riverhye/SpringBoot-MyBatis) |
+| 32 | 2024-02-01 | [Java] Spring boot 입문 | Java, SeSAC, Springboot | 4,119 | 학습노트 | [원문](https://velog.io/@riverhye/Java-Spring-boot-입문) |
+| 33 | 2024-02-01 | [TS] No inputs were found in config file | JavaScript, React, typescript | 1,187 | 일반 | [원문](https://velog.io/@riverhye/TS-No-inputs-were-found-in-config-file) |
+| 34 | 2024-01-27 | [Java] 클래스와 상속, 추상 클래스 | Java, SeSAC | 7,589 | 학습노트 | [원문](https://velog.io/@riverhye/Java-클래스와-상속-추상-클래스) |
+| 35 | 2024-01-25 | [Java] 배열과 ArrayList | Java, SeSAC | 4,148 | 학습노트 | [원문](https://velog.io/@riverhye/Java-배열과-ArrayList) |
+| 36 | 2024-01-23 | [Java] 조건문과 메서드 오버로딩 | Java, SeSAC | 4,946 | 학습노트 | [원문](https://velog.io/@riverhye/Java-조건문과-메서드-오버로딩) |
+| 37 | 2024-01-21 | [React] tailwindcss 사용기 | CSS, React, tailwind | 5,623 | 일반 | [원문](https://velog.io/@riverhye/React-tailwindcss-사용기) |
+| 38 | 2024-01-20 | [재능마켓] 팀 프로젝트 회고록 | SeSAC, project | 3,830 | 학습노트 | [원문](https://velog.io/@riverhye/팀-프로젝트-회고록) |
+| 39 | 2024-01-18 | 프로젝트 조각 회고록 : 마지막 + 피드백 | JavaScript, React, SeSAC, project | 8,569 | 학습노트 | [원문](https://velog.io/@riverhye/프로젝트-조각-회고록-11) |
+| 40 | 2024-01-05 | [코딩온] 프로젝트 조각 회고록 : 7~10일차 | JavaScript, React, SeSAC, project, 코딩교육, 코딩온 | 7,100 | 학습노트 | [원문](https://velog.io/@riverhye/프로젝트-조각-회고록-7일차) |
+| 41 | 2024-01-02 | [코딩온] CSS 스타일링 : SASS | CSS, SeSAC, 부트캠프, 코딩교육, 코딩온 | 3,456 | 학습노트 | [원문](https://velog.io/@riverhye/CSS-스타일링-module-css-SASS-styled-component) |
+| 42 | 2024-01-01 | [코딩온] 프로젝트 조각 회고록 : 4~6일차 | JavaScript, React, SeSAC, project, 부트캠프, 코딩교육, 코딩온 | 7,444 | 학습노트 | [원문](https://velog.io/@riverhye/프로젝트-조각-회고록-46일차) |
+| 43 | 2023-12-28 | [코딩온] 프로젝트 조각 회고록 :  1~3일차 | JavaScript, React, SeSAC, project, 부트캠프, 코딩교육, 코딩온 | 5,399 | 학습노트 | [원문](https://velog.io/@riverhye/재능-삼-팀플-조각-회고록-1) |
+| 44 | 2023-12-24 | [코딩온] 프로젝트 회고록 : React & socket.io 실시간 채팅 구현 | JavaScript, SeSAC, project, react.js, websocket, 부트캠프, 코딩교육, 코딩온 | 7,942 | 학습노트 | [원문](https://velog.io/@riverhye/chat-project) |
+| 45 | 2023-12-17 | [코딩온] React Hooks : useMemo, useCallback, useReducer | react.js, 부트캠프, 코딩교육, 코딩온 | 7,666 | 학습노트 | [원문](https://velog.io/@riverhye/코딩온-React-Hooks-useMemo-useCallback-useReducer-Custom-hook) |
+| 46 | 2023-12-13 | [코딩온] React : Life Cycle & useEffect | react.js, 부트캠프, 코딩교육, 코딩온 | 7,324 | 학습노트 | [원문](https://velog.io/@riverhye/코딩온-React-Life-Cycle-useEffect) |
+| 47 | 2023-12-13 | [JS] 새로 고침 시 좋아요 상태 유지 | JavaScript | 4,526 | 일반 | [원문](https://velog.io/@riverhye/JS-새로-고침-시-좋아요-상태-유지) |
+| 48 | 2023-12-06 | [React] 배운 내용 토대로 좋아요 기능 구현하기 | JavaScript, SeSAC, react.js | 10,936 | 학습노트 | [원문](https://velog.io/@riverhye/React-state-Event-map-useRef-useEffect-sass) |
+| 49 | 2023-11-28 | [React] 리액트 입문 | JavaScript, SeSAC, react.js | 7,376 | 학습노트 | [원문](https://velog.io/@riverhye/리액트) |
+| 50 | 2023-11-25 | [무비캐스터] 팀 프로젝트 회고록 | JavaScript, SeSAC, project, react.js | 23,793 | 학습노트 | [원문](https://velog.io/@riverhye/프로젝트-발표-피드백) |
+| 51 | 2023-11-19 | 난감과 난관 : 11/17~9(금토일) | JavaScript, SeSAC, project, react.js | 8,590 | 학습노트 | [원문](https://velog.io/@riverhye/난감난관-11179금토일) |
+| 52 | 2023-11-16 | 하다보면 되더라 - 11/15~16(수, 목) | JavaScript, SeSAC, project, react.js | 8,001 | 학습노트 | [원문](https://velog.io/@riverhye/1115수) |
+| 53 | 2023-11-14 | 왠지 될 것 같아 - 11/14(화) | JavaScript, SeSAC, project, react.js | 1,722 | 학습노트 | [원문](https://velog.io/@riverhye/1114) |
+| 54 | 2023-11-11 | 아 이걸 했어야 했는데 - 11/11(토) | JavaScript, SeSAC, project, react.js | 4,029 | 학습노트 | [원문](https://velog.io/@riverhye/아-이걸-했어야-했는데-1111토) |
+| 55 | 2023-11-09 | 팀 프로젝트 기획  - 11/9(목)  | SeSAC, project | 3,711 | 학습노트 | [원문](https://velog.io/@riverhye/프로젝트-기획-119목) |
+| 56 | 2023-11-08 | cookie와 session | SeSAC | 5,402 | 학습노트 | [원문](https://velog.io/@riverhye/sequelize-예제-쿠키와-세션) |
+| 57 | 2023-11-08 | [Node.js & MySQL] sequelize 라이브러리 | SeSAC, mysql, node.js | 6,226 | 학습노트 | [원문](https://velog.io/@riverhye/Node.js-MySQL-sequelize-라이브러리) |
+| 58 | 2023-11-06 | [🧸] 영화 평/리뷰 사이트 : 회원가입 | JavaScript, react.js | 5,028 | 일반 | [원문](https://velog.io/@riverhye/영화-평리뷰-사이트) |
+| 59 | 2023-11-03 | [🧸] 영화 평/리뷰 사이트 : 시작하기 | JavaScript, node.js, react.js | 4,893 | 일반 | [원문](https://velog.io/@riverhye/영화-평리뷰-사이트-시작하기) |
+| 60 | 2023-11-03 | [github] 화살표 폴더/git 폴더 안 됨 에러 해결 | git, github | 789 | 일반 | [원문](https://velog.io/@riverhye/github-화살표-폴더git-폴더-안-됨-에러-해결) |
+| 61 | 2023-11-02 | [Node.js & MySQL] 회원 CRUD | SeSAC, node.js | 10,236 | 학습노트 | [원문](https://velog.io/@riverhye/Node.js-MySQL-회원-CRUD) |
+| 62 | 2023-11-01 | [React] 왜 리액트인가? | JavaScript, react.js | 3,116 | 일반 | [원문](https://velog.io/@riverhye/React-왜-리액트인가) |
+| 63 | 2023-10-27 | [Node.js] MVC 패턴 알아보기 | SeSAC, node.js | 9,167 | 학습노트 | [원문](https://velog.io/@riverhye/Node.js-MVC-패턴) |
+| 64 | 2023-10-24 | [React] TypeError: Cannot read properties of undefined (reading 'find') | JavaScript, TIL, react.js | 2,262 | 학습노트 | [원문](https://velog.io/@riverhye/React-TypeError-Cannot-read-properties-of-undefined-reading-find) |
+| 65 | 2023-10-23 | [React] 기본 라우팅하기 | JavaScript, react.js | 2,108 | 일반 | [원문](https://velog.io/@riverhye/React-기본-라우팅하기-react-router-dom) |
+| 66 | 2023-10-23 | [Node.js] 파일 업로드 : multer | SeSAC, node.js | 11,456 | 학습노트 | [원문](https://velog.io/@riverhye/Node.js-파일-업로드-multer) |
+| 67 | 2023-10-23 | [JS] 프로토타입(prototype) 파헤치기 🕵️ | JavaScript | 5,853 | 일반 | [원문](https://velog.io/@riverhye/JS-프로토타입prototype-파헤치기) |
+| 68 | 2023-10-20 | [Node.js] 동기 HTTP & 비동기 HTTP | SeSAC, http, node.js | 10,859 | 학습노트 | [원문](https://velog.io/@riverhye/비동기-HTTP) |
+| 69 | 2023-10-19 | [React] 배열의 개별값 변경 (feat. 코딩애플 리액트 강의) | JavaScript, TIL, react.js | 6,889 | 학습노트 | [원문](https://velog.io/@riverhye/React-배열의-개별값-변경-feat.-코딩애플-리액트-강의) |
+| 70 | 2023-10-18 | [React] 모달창 만들기 (feat. 코딩애플 리액트 강의) | JavaScript, TIL, react.js | 4,140 | 학습노트 | [원문](https://velog.io/@riverhye/React-모달창-만들기-feat.-코딩-애플-리액트-강의) |
+| 71 | 2023-10-16 | [React] 리액트 프로젝트 생성 시 에러 해결 | TIL, react.js | 2,021 | 학습노트 | [원문](https://velog.io/@riverhye/react-no-such-files-관련-에러) |
+| 72 | 2023-10-15 | [JS] 실행 컨텍스트 | JavaScript | 5,571 | 일반 | [원문](https://velog.io/@riverhye/JS-실행-컨텍스트) |
+| 73 | 2023-10-15 | [JS] Promise와 async/await | JavaScript, SeSAC | 5,367 | 학습노트 | [원문](https://velog.io/@riverhye/Promise-그리고-asyncawait) |
+| 74 | 2023-10-15 | [Node.js] express 모듈, ejs 템플릿 엔진 | JavaScript, SeSAC, node.js | 7,774 | 학습노트 | [원문](https://velog.io/@riverhye/Node.js) |
+| 75 | 2023-10-10 | 서버 환경 구축 & 미니 웹페이지  | SeSAC | 4,491 | 학습노트 | [원문](https://velog.io/@riverhye/서버-환경-구축하기) |
+| 76 | 2023-10-09 | [JS] 콜백 함수 | JavaScript | 4,061 | 일반 | [원문](https://velog.io/@riverhye/JS-콜백-함수) |
+| 77 | 2023-10-03 | [JS] String | JavaScript, TIL | 2,934 | 학습노트 | [원문](https://velog.io/@riverhye/JS-String과-toString) |
+| 78 | 2023-10-01 | [JQuery] 문법과 메서드 | SeSAC, jquery | 5,835 | 학습노트 | [원문](https://velog.io/@riverhye/새싹X코딩온-풀스택-웹-융합-개발자-양성-과정-W3-JQuery-입문) |
+| 79 | 2023-09-24 | [JS] 반복문, 메서드, DOM | JavaScript, SeSAC | 6,547 | 학습노트 | [원문](https://velog.io/@riverhye/JS) |
+| 80 | 2023-09-23 | [JS] 입문 | JavaScript, SeSAC | 4,851 | 학습노트 | [원문](https://velog.io/@riverhye/CSS-animation-JS-기초) |
+| 81 | 2023-09-19 | [CSS] Advanced | CSS, SeSAC, TIL | 5,709 | 학습노트 | [원문](https://velog.io/@riverhye/css-advanced) |
+| 82 | 2023-09-16 | [CSS] 입문 | CSS, SeSAC, developtool | 6,886 | 학습노트 | [원문](https://velog.io/@riverhye/css) |
+| 83 | 2023-09-16 | [HTML] 정의와 기본문법 | SeSAC, html | 3,918 | 학습노트 | [원문](https://velog.io/@riverhye/html) |
+| 84 | 2023-09-15 | [Git] commit해도 잔디가 안 채워질 때  | TIL, git, github | 884 | 학습노트 | [원문](https://velog.io/@riverhye/git-commit해도-잔디가-안-채워질-때) |
+| 85 | 2023-09-14 | [Git] 레포지토리와 연결된 local 폴더가 여러 개일 때 | TIL, git, github | 2,706 | 학습노트 | [원문](https://velog.io/@riverhye/git-레파지토리와-연결된-local-폴더가-여러-개일-때) |
+| 86 | 2023-09-13 | [Git] 파일을 다른 레포지토리로 이동 | TIL, git, github | 1,860 | 학습노트 | [원문](https://velog.io/@riverhye/Github-파일을-다른-레파지토리로-이동하기) |
+| 87 | 2023-09-13 | [Git] GitHub 사용법 | SeSAC, git, github | 2,806 | 학습노트 | [원문](https://velog.io/@riverhye/Git과-GitHub-차이-사용법) |
+| 88 | 2023-09-11 | [JS] function 강의 정리 | JavaScript, TIL | 4,939 | 학습노트 | [원문](https://velog.io/@riverhye/0911-2023) |
+| 89 | 2023-09-10 | 마크다운 문법 | TIL | 3,516 | 학습노트 | [원문](https://velog.io/@riverhye/TIL-0910-2023) |
+
+일반 40편 · 학습노트 49편

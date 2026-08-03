@@ -1,5 +1,6 @@
 import Highlight from "@tiptap/extension-highlight";
 import Image from "@tiptap/extension-image";
+import { TableKit } from "@tiptap/extension-table";
 import { Color, TextStyle } from "@tiptap/extension-text-style";
 import { Placeholder } from "@tiptap/extensions";
 import StarterKit from "@tiptap/starter-kit";
@@ -14,8 +15,10 @@ import { Callout } from "./callout";
 // Callout은 별(✦) 모티프 커스텀 블록.
 // TextStyle+Color는 글자색(인라인 style로 직렬화), Highlight는 형광펜
 // (<mark>, `==텍스트==` input rule 포함 — 색은 globals.css의 --highlight 토큰).
+// TableKit은 표(table/row/cell/header 묶음) — Velog 이관 글의 비교표용.
 export const editorExtensions = [
   StarterKit,
+  TableKit,
   Placeholder.configure({
     placeholder: "내용을 입력하세요…",
   }),

@@ -84,4 +84,60 @@ test.describe("블로그 CMS 통합", () => {
     await page.goto("/blog?tag=nope");
     await expect(page.getByText("아직 글이 없습니다.")).toBeVisible();
   });
+
+  // Velog 이관 글의 비교표가 표 모양으로 나와야 한다(PostBody의 table 분기).
+  test("본문의 표가 읽기 화면에서 표로 렌더된다", async ({ page }) => {
+    // Given: 소유자로 로그인해
+    const login = await page.request.post("/api/auth/login", {
+      data: { password: "stella-dev" },
+    });
+    expect(login.ok()).toBe(true);
+
+    // When: 표가 든 본문을 발행하면
+    const cell = (text: string, header = false, colspan = 1) => ({
+      type: header ? "tableHeader" : "tableCell",
+      attrs: { colspan, rowspan: 1 },
+      content: [{ type: "paragraph", content: [{ type: "text", text }] }],
+    });
+    const res = await page.request.post("/api/posts", {
+      data: {
+        title: "E2E 표 렌더",
+        tags: [],
+        status: "published",
+        body: {
+          type: "doc",
+          content: [
+            {
+              type: "table",
+              content: [
+                {
+                  type: "tableRow",
+                  content: [cell("구분", true), cell("MVC", true)],
+                },
+                {
+                  type: "tableRow",
+                  content: [cell("두 칸 병합", false, 2)],
+                },
+              ],
+            },
+          ],
+        },
+      },
+    });
+    expect(res.status()).toBe(201);
+    const { slug, id } = (await res.json()) as { slug: string; id: string };
+
+    // Then: 상세 페이지에 실제 table 태그와 병합 셀이 나온다
+    await page.goto(`/blog/${encodeURIComponent(slug)}`);
+    await expect(page.locator(".prose-stella table th").first()).toHaveText(
+      "구분",
+    );
+    await expect(page.locator(".prose-stella table td")).toHaveAttribute(
+      "colspan",
+      "2",
+    );
+
+    // 뒷정리 — 목록에 남지 않게 지운다
+    expect((await page.request.delete(`/api/posts/${id}`)).ok()).toBe(true);
+  });
 });
