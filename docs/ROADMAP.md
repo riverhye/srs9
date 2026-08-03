@@ -127,10 +127,16 @@ See `docs/CONVENTIONS.md` for coding conventions.
 - [ ] Experience section (real career material — provided by Claire)
 - [ ] Projects section (role · stack · outcome · links)
 
-### ⬜ 6. Velog curation & migration
-- [ ] Collect Velog posts → classify by topic → prioritize by "job-search signal" → pick 10–20
-- [ ] Import into CMS — Velog exports **markdown**, CMS stores **Tiptap JSON** → needs an MD → Tiptap JSON conversion step
-- [ ] (Defer the rest to a later pass)
+### 🟡 6. Velog curation & migration — 19편 imported as drafts 2026-08-03
+- [x] Collect — Velog has no bulk export; its public GraphQL (`v2.velog.io/graphql`) paginates by `cursor` and returns the raw markdown `body`. All 90 posts collected, cached under `scripts/`
+- [x] Curation — kept 2024-07-11 이후 19편 (실무 글 구간). 71편 제외: 2023년~2024 상반기는 부트캠프 학습 기록 비중이 큼
+- [x] MD → Tiptap JSON — `generateJSON` ships in the installed `@tiptap/core` but needs a DOM, and the app's extension set is TS. Solved by piping HTML through the real editor in a browser (`scripts/import-velog.mjs`): it lands in the same schema the renderer knows, so no unrenderable nodes slip in
+- [x] Images — 50 velcdn images moved to R2 (`/api/media/…`, all serving 200); 4 third-party links (Tenor·Giphy·Pinterest) left pointing at their origin rather than re-hosting someone else's asset
+- [x] Original slug + published date preserved (`PostInput.slug`/`date`); all 19 verified against source
+- [ ] Publish — imported as **draft**. Claire reviews each and publishes; 3편은 태그가 비어 있어 채워야 함
+- [ ] (Remaining 71편 — later pass, if ever)
+> Table support (Stage 6 선행) — 2편에 비교표가 있어 `TableKit` + renderer/CSS 추가.
+> Re-running the tool is safe: existing slugs are skipped and uploaded images are cached.
 
 ### ⬜ 7. (optional) View counter
 - [ ] Lightweight per-post view count via D1
