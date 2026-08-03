@@ -44,3 +44,6 @@ skills-lock.json
 /.open-next/
 /.wrangler/
 .dev.vars
+
+# Velog 이관 도구 캐시(수집 결과·이미지 매핑)
+scripts/.velog-*.json
