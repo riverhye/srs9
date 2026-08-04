@@ -144,7 +144,7 @@ See `docs/CONVENTIONS.md` for coding conventions.
 - [ ] Lightweight per-post view count via D1
 
 ### ⬜ 8. Polish
-- [ ] Code block syntax highlighting (deferred from 3b-3)
+- [x] Code block syntax highlighting — done 2026-08-04. `highlight.js/lib/common`을 서버(PostBody는 RSC)에서 돌려 색칠된 마크업을 내보낸다 → 클라 JS 0. shiki 대신 고른 이유: async라 동기 재귀 렌더러를 바꿔야 했다. hljs 기본 테마는 안 쓰고 클래스에 사이트 팔레트를 매핑(색은 키워드·문자열·주석·이름 네 갈래, 다크모드 별도). 이관 글의 코드블록 130개 중 언어가 붙은 107개가 대상
 - [ ] Scroll animation / smoother section transitions
 - [ ] Metadata / OG images / sitemap / robots
 - [ ] Responsive pass, dark mode finish

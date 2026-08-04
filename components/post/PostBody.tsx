@@ -1,4 +1,5 @@
 import type { JSONContent } from "@tiptap/core";
+import hljs from "highlight.js/lib/common";
 import type { CSSProperties, ReactNode } from "react";
 
 // Tiptap JSON(doc) → 읽기용 React. 서버 컴포넌트라 클라 JS 0, SEO 유리.
@@ -30,11 +31,7 @@ function RenderNode({ node }: { node: JSONContent }): ReactNode {
     case "callout":
       return <aside data-callout="">{renderNodes(node.content)}</aside>;
     case "codeBlock":
-      return (
-        <pre>
-          <code>{renderNodes(node.content)}</code>
-        </pre>
-      );
+      return <CodeBlock node={node} />;
     case "bulletList":
       return <ul>{renderNodes(node.content)}</ul>;
     case "orderedList":
@@ -80,6 +77,35 @@ function RenderNode({ node }: { node: JSONContent }): ReactNode {
     default:
       return null;
   }
+}
+
+// 코드블록 — 서버에서 색칠해 내보내므로 클라이언트 JS가 0이다.
+// 언어를 모르거나 highlight.js가 지원하지 않으면 평문 그대로 낸다.
+function CodeBlock({ node }: { node: JSONContent }) {
+  const code = (node.content ?? []).map((c) => c.text ?? "").join("");
+  const language = String(node.attrs?.language ?? "");
+  const known = language && hljs.getLanguage(language) ? language : null;
+  if (!known) {
+    return (
+      <pre>
+        <code>{code}</code>
+      </pre>
+    );
+  }
+  // highlight.js 출력은 우리가 넘긴 코드에서 만든 마크업이고,
+  // ignoreIllegals로 문법이 어긋난 조각도 통째로 버리지 않는다.
+  const { value } = hljs.highlight(code, {
+    language: known,
+    ignoreIllegals: true,
+  });
+  return (
+    <pre>
+      <code
+        className={`hljs language-${known}`}
+        dangerouslySetInnerHTML={{ __html: value }}
+      />
+    </pre>
+  );
 }
 
 // 셀 병합 값. 1이면 속성을 내지 않는다(기본값이라 불필요한 마크업 방지).

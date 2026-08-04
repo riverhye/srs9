@@ -158,6 +158,59 @@ test.describe("블로그 CMS 통합", () => {
     );
   });
 
+  // 코드블록 — 언어가 있으면 서버에서 색칠해 내보낸다(클라 JS 없이).
+  test("코드블록이 언어별로 색칠되고, 모르는 언어는 평문으로 나온다", async ({
+    page,
+  }) => {
+    expect(
+      (
+        await page.request.post("/api/auth/login", {
+          data: { password: "stella-dev" },
+        })
+      ).ok(),
+    ).toBe(true);
+
+    const codeBlock = (language: string | null, text: string) => ({
+      type: "codeBlock",
+      attrs: { language },
+      content: [{ type: "text", text }],
+    });
+    const res = await page.request.post("/api/posts", {
+      data: {
+        title: "E2E 코드 색칠",
+        tags: [],
+        status: "published",
+        body: {
+          type: "doc",
+          content: [
+            codeBlock("ts", "const answer: number = 42; // 주석"),
+            codeBlock("nonexistent-lang", "이건 그냥 평문"),
+          ],
+        },
+      },
+    });
+    expect(res.status()).toBe(201);
+    const { slug, id } = (await res.json()) as { slug: string; id: string };
+
+    await page.goto(`/blog/${encodeURIComponent(slug)}`);
+    const blocks = page.locator(".prose-stella pre code");
+
+    // 아는 언어 — 토큰이 span으로 쪼개지고 키워드·주석이 잡힌다
+    const ts = blocks.first();
+    await expect(ts).toHaveClass(/language-ts/);
+    await expect(ts.locator(".hljs-keyword").first()).toHaveText("const");
+    await expect(ts.locator(".hljs-comment")).toContainText("주석");
+    // 색칠해도 코드 원문은 그대로다
+    await expect(ts).toContainText("const answer: number = 42;");
+
+    // 모르는 언어 — 색칠 마크업 없이 평문
+    const plain = blocks.nth(1);
+    await expect(plain).toHaveText("이건 그냥 평문");
+    await expect(plain.locator("span")).toHaveCount(0);
+
+    expect((await page.request.delete(`/api/posts/${id}`)).ok()).toBe(true);
+  });
+
   // Velog 이관 글의 비교표가 표 모양으로 나와야 한다(PostBody의 table 분기).
   test("본문의 표가 읽기 화면에서 표로 렌더된다", async ({ page }) => {
     // Given: 소유자로 로그인해

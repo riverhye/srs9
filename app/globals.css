@@ -126,7 +126,7 @@ body {
   border-radius: 0.25rem;
   padding: 0.125em 0.375em;
 }
-/* 코드블록 — 신택스 하이라이트는 3b(읽기 사이드)에서 */
+/* 코드블록 */
 .prose-stella pre {
   margin: 1.25em 0;
   padding: 1rem;
@@ -141,6 +141,62 @@ body {
   border: none;
   padding: 0;
   font-size: 0.875rem;
+}
+
+/* 신택스 하이라이트 — highlight.js 클래스에 우리 팔레트를 매핑한다.
+   hljs 기본 테마를 쓰지 않는 이유: 사이트 색과 어긋나고 다크모드 대응이 따로 온다.
+   색은 네 갈래로만 나눈다(키워드·문자열·주석·이름) — 무지개색은 읽기를 방해한다. */
+:root {
+  --code-keyword: #7c3aed;
+  --code-string: #0f766e;
+  --code-comment: #9a9aa3;
+  --code-name: #b45309;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --code-keyword: #c4b5fd;
+    --code-string: #5eead4;
+    --code-comment: #6b6b75;
+    --code-name: #fbbf24;
+  }
+}
+
+.prose-stella .hljs-keyword,
+.prose-stella .hljs-built_in,
+.prose-stella .hljs-literal,
+.prose-stella .hljs-type,
+.prose-stella .hljs-selector-tag,
+.prose-stella .hljs-meta {
+  color: var(--code-keyword);
+}
+.prose-stella .hljs-string,
+.prose-stella .hljs-regexp,
+.prose-stella .hljs-number,
+.prose-stella .hljs-addition {
+  color: var(--code-string);
+}
+.prose-stella .hljs-comment,
+.prose-stella .hljs-quote {
+  color: var(--code-comment);
+  font-style: italic;
+}
+.prose-stella .hljs-title,
+.prose-stella .hljs-name,
+.prose-stella .hljs-attr,
+.prose-stella .hljs-attribute,
+.prose-stella .hljs-variable,
+.prose-stella .hljs-template-variable,
+.prose-stella .hljs-selector-class,
+.prose-stella .hljs-selector-id {
+  color: var(--code-name);
+}
+/* 강조/삭제 표시는 색 대신 굵기로 — 팔레트를 늘리지 않는다 */
+.prose-stella .hljs-strong,
+.prose-stella .hljs-section {
+  font-weight: 600;
+}
+.prose-stella .hljs-deletion {
+  color: var(--danger);
 }
 
 .prose-stella ul,
