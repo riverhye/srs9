@@ -127,14 +127,14 @@ See `docs/CONVENTIONS.md` for coding conventions.
 - [ ] Experience section (real career material — provided by Claire)
 - [ ] Projects section (role · stack · outcome · links)
 
-### 🟡 6. Velog curation & migration — 19편 imported as drafts 2026-08-03
+### ✅ 6. Velog curation & migration — 19편 published, done 2026-08-04
 - [x] Collect — Velog has no bulk export; its public GraphQL (`v2.velog.io/graphql`) paginates by `cursor` and returns the raw markdown `body`. All 90 posts collected, cached under `scripts/`
 - [x] Curation — kept 2024-07-11 이후 19편 (실무 글 구간). 71편 제외: 2023년~2024 상반기는 부트캠프 학습 기록 비중이 큼
 - [x] MD → Tiptap JSON — `generateJSON` ships in the installed `@tiptap/core` but needs a DOM, and the app's extension set is TS. Solved by piping HTML through the real editor in a browser (`scripts/import-velog.mjs`): it lands in the same schema the renderer knows, so no unrenderable nodes slip in
 - [x] Images — 50 velcdn images moved to R2 (`/api/media/…`, all serving 200); 4 third-party links (Tenor·Giphy·Pinterest) left pointing at their origin rather than re-hosting someone else's asset
 - [x] Original slug + published date preserved (`PostInput.slug`/`date`); all 19 verified against source
 - [x] Published — 백업 이관이라 원본 그대로 공개 상태. 대시보드도 `updatedAt` 대신 발행일 기준으로 표시·정렬(이관 글은 수정 시각이 전부 이관일이라 쓸모가 없음)
-- [ ] 태그가 빈 3편 보완 (PostgresSQL+Prisma / 프론트 아키텍처 변경 / 인텔 맥→M시리즈)
+- [x] 태그 정리 — 빈 3편 채움(`backend` / `frontend`+`architecture` / `setup`). 태그 표기는 영어로 통일: 시리즈 두 편이 Velog에서 영어·한글로 갈려 있어 `빌드`→`build`, `프론트엔드`→`frontend`로 합침(`최적화`는 짝이 없어 한글 유지). 17종
 - [ ] (Remaining 71편 — later pass, if ever)
 > Table support (Stage 6 선행) — 2편에 비교표가 있어 `TableKit` + renderer/CSS 추가.
 > Re-running the tool is safe: existing slugs are skipped and uploaded images are cached.
