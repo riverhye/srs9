@@ -2,6 +2,7 @@ import "server-only";
 
 import type { JSONContent } from "@tiptap/core";
 import { and, desc, eq } from "drizzle-orm";
+import { cache } from "react";
 
 import { getDb } from "@/lib/db";
 import { comments, type Post, posts } from "@/lib/db/schema";
@@ -38,16 +39,18 @@ export async function getPublishedPosts(tag?: string): Promise<Post[]> {
   return tag ? rows.filter((p) => parseTags(p).includes(tag)) : rows;
 }
 
-export async function getPublishedPostBySlug(
-  slug: string,
-): Promise<Post | undefined> {
-  const [row] = await getDb()
-    .select()
-    .from(posts)
-    .where(and(eq(posts.slug, slug), eq(posts.status, "published")))
-    .limit(1);
-  return row;
-}
+// 한 요청 안에서 두 번 불린다(generateMetadata + 페이지 본문) — cache로 묶어
+// DB를 한 번만 읽는다. 요청이 끝나면 캐시도 사라진다.
+export const getPublishedPostBySlug = cache(
+  async (slug: string): Promise<Post | undefined> => {
+    const [row] = await getDb()
+      .select()
+      .from(posts)
+      .where(and(eq(posts.slug, slug), eq(posts.status, "published")))
+      .limit(1);
+    return row;
+  },
+);
 
 // 에디터 편집 로드용 — 상태 무관.
 export async function getPostById(id: string): Promise<Post | undefined> {

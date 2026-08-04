@@ -4,7 +4,11 @@ import { GuestbookBoard } from "@/components/guestbook/GuestbookBoard";
 import { isOwner } from "@/lib/auth/session";
 import { listEntries } from "@/lib/guestbook";
 
-export const metadata: Metadata = { title: "Guestbook" };
+export const metadata: Metadata = {
+  title: "Guestbook",
+  description: "다녀간 흔적을 남겨주세요. 닉네임과 비밀번호만으로 씁니다.",
+  alternates: { canonical: "/guestbook" },
+};
 
 export default async function GuestbookPage() {
   const [entries, owner] = await Promise.all([listEntries(), isOwner()]);

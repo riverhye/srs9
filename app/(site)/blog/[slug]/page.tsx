@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { CommentSection } from "@/components/comment/CommentSection";
 import { PostBody } from "@/components/post/PostBody";
 import {
+  excerptOf,
   formatDate,
   getPublishedPostBySlug,
   parseBody,
@@ -21,7 +22,24 @@ export async function generateMetadata({
   const post = await getPublishedPostBySlug(
     decodeURIComponent(slug).normalize("NFC"),
   );
-  return { title: post?.title ?? "Blog" };
+  if (!post) return { title: "Blog" };
+
+  // 발췌를 공유 카드·검색 결과 설명으로 쓴다(본문 첫 문단 평문).
+  const description = excerptOf(post, 160);
+  const canonical = `/blog/${encodeURIComponent(post.slug)}`;
+  return {
+    title: post.title,
+    description,
+    alternates: { canonical },
+    openGraph: {
+      type: "article",
+      title: post.title,
+      description,
+      url: canonical,
+      publishedTime: post.date,
+      tags: parseTags(post),
+    },
+  };
 }
 
 export default async function PostDetail({

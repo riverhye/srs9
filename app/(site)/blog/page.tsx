@@ -4,7 +4,12 @@ import Link from "next/link";
 import { PostCard } from "@/components/feed/PostCard";
 import { getPublishedPosts, parseTags } from "@/lib/posts";
 
-export const metadata: Metadata = { title: "Blog" };
+export const metadata: Metadata = {
+  title: "Blog",
+  description:
+    "프론트엔드 실무에서 부딪힌 문제와 해결 과정, 읽은 것과 다녀온 곳의 기록.",
+  alternates: { canonical: "/blog" },
+};
 
 // 태그 필터: ?tag=essay 등. Next 16에서 searchParams는 Promise.
 export default async function BlogList({
