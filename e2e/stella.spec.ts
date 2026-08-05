@@ -156,7 +156,7 @@ test.describe("/stella/write 이미지·콜아웃", () => {
       "base64",
     );
     await page.setInputFiles('input[type="file"]', {
-      name: "t.png",
+      name: "빌드-용량_비교.png",
       mimeType: "image/png",
       buffer: png,
     });
@@ -175,6 +175,8 @@ test.describe("/stella/write 이미지·콜아웃", () => {
     // 크기가 함께 기록돼야 읽기 화면에서 본문이 밀리지 않는다(CLS). 샘플은 1×1.
     await expect(img).toHaveAttribute("width", "1");
     await expect(img).toHaveAttribute("height", "1");
+    // 대체 텍스트는 파일명에서 만든다(확장자 제거, 구분자는 공백)
+    await expect(img).toHaveAttribute("alt", "빌드 용량 비교");
   });
 
   test("콜아웃 버튼이 블록을 callout으로 감싸고 active로 표시된다", async ({

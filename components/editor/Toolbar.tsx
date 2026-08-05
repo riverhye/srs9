@@ -15,6 +15,15 @@ type ToolbarProps = {
 
 const HEADING_LEVELS = [1, 2, 3, 4] as const;
 
+// 파일명을 대체 텍스트로 쓴다 — 확장자를 떼고 구분자를 공백으로.
+// 파일명이 무의미하면 alt도 무의미해지므로, 나중에 alt 수정 UI를 붙일 자리다.
+function altFromFileName(name: string): string {
+  return name
+    .replace(/\.[^.]+$/, "")
+    .replace(/[-_]+/g, " ")
+    .trim();
+}
+
 // 고른 파일의 원본 픽셀 크기. 못 읽으면 크기 없이 넣는다(삽입 자체는 막지 않는다).
 function readImageSize(
   file: File,
@@ -92,7 +101,7 @@ export function Toolbar({ editor }: ToolbarProps) {
       editor
         .chain()
         .focus()
-        .setImage({ src: url, ...dims })
+        .setImage({ src: url, alt: altFromFileName(file.name), ...dims })
         .run();
     } catch {
       alert("업로드에 실패했습니다");
