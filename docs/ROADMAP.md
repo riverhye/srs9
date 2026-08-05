@@ -145,7 +145,9 @@ See `docs/CONVENTIONS.md` for coding conventions.
 
 ### ⬜ 8. Polish
 - [x] Code block syntax highlighting — done 2026-08-04. `highlight.js/lib/common`을 서버(PostBody는 RSC)에서 돌려 색칠된 마크업을 내보낸다 → 클라 JS 0. shiki 대신 고른 이유: async라 동기 재귀 렌더러를 바꿔야 했다. hljs 기본 테마는 안 쓰고 클래스에 사이트 팔레트를 매핑(색은 키워드·문자열·주석·이름 네 갈래, 다크모드 별도). 이관 글의 코드블록 130개 중 언어가 붙은 107개가 대상
-- [ ] Scroll animation / smoother section transitions
+- [x] Scroll animation — done 2026-08-05. `.reveal` 클래스가 CSS 스크롤 타임라인(`animation-timeline: view()`)으로 기존 `fade-up` 키프레임을 재생 → JS 0, 서버 컴포넌트 그대로. `/blog` 목록 카드에만 적용(긴 본문은 애니메이션이 읽기를 방해해서 제외). 시작 상태(`opacity: 0`)를 `@supports` 안에만 두는 게 핵심 — 미지원 브라우저에서 이걸 빼면 콘텐츠가 영구히 안 보인다. `prefers-reduced-motion: reduce`면 규칙 자체가 적용되지 않음
+  > e2e에서 만든 글은 `finally`로 지운다 — 실패 시 뒷정리에 도달하지 못해 로컬 D1에 24편이 쌓였다.
+  > 스크롤 측정은 `behavior: "instant"` — `html`에 `scroll-behavior: smooth`가 걸려 있어 기본값으로는 이동 전에 측정된다.
 - [x] Metadata / OG images / sitemap / robots — done 2026-08-05
   - `metadataBase`(기본 `https://srs9.com`, `NEXT_PUBLIC_SITE_URL`로 덮어쓰기) — 공유 카드 이미지는 절대 주소여야 외부 서비스가 읽는다
   - 제목·설명·OG·Twitter 기본값은 **루트 레이아웃 한 곳**. `(site)/layout.tsx`에도 title 템플릿이 있어 홈 제목이 `srs9 · srs9`가 됐다 → 중복 제거

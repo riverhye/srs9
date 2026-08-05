@@ -158,6 +158,68 @@ test.describe("블로그 CMS 통합", () => {
     );
   });
 
+  // 스크롤 리빌 — 첫 화면 카드가 숨어 있으면 안 된다(이 방식의 유일한 위험).
+  test("목록 카드가 로드 직후 보이고, 아래 카드도 스크롤하면 보인다", async ({
+    page,
+  }) => {
+    expect(
+      (
+        await page.request.post("/api/auth/login", {
+          data: { password: "stella-dev" },
+        })
+      ).ok(),
+    ).toBe(true);
+    const ids: string[] = [];
+    // 실패해도 만든 글은 지운다 — 안 그러면 로컬 D1에 쌓여 실제 목록에 섞인다
+    try {
+      for (let i = 0; i < 8; i++) {
+        const res = await page.request.post("/api/posts", {
+          data: {
+            title: `E2E 리빌 ${i}`,
+            tags: [],
+            status: "published",
+            date: `2025-01-${String(i + 1).padStart(2, "0")}`,
+            body: {
+              type: "doc",
+              content: [
+                {
+                  type: "paragraph",
+                  content: [{ type: "text", text: `본문 ${i}` }],
+                },
+              ],
+            },
+          },
+        });
+        ids.push(((await res.json()) as { id: string }).id);
+      }
+
+      await page.goto("/blog");
+      const cards = page.locator(".reveal");
+      const opacityOf = (target: ReturnType<typeof cards.nth>) =>
+        target
+          .evaluate((el) => getComputedStyle(el).opacity)
+          .then((v) => Number(v));
+
+      // 첫 카드는 진입 구간을 이미 지난 상태 — 완전히 보여야 한다
+      expect(await opacityOf(cards.nth(0))).toBeGreaterThan(0.9);
+
+      // 아래쪽 카드를 화면 중앙으로 올리면 진입 구간을 지나 완전히 보인다.
+      // scroll-behavior: smooth가 걸려 있어 instant로 즉시 이동해야 측정이 맞는다.
+      const lower = cards.nth(5);
+      await lower.evaluate((el) => {
+        el.scrollIntoView({ block: "center", behavior: "instant" });
+      });
+      await expect(lower).toBeVisible();
+      await expect
+        .poll(() => opacityOf(lower), { timeout: 3000 })
+        .toBeGreaterThan(0.9);
+    } finally {
+      for (const id of ids) {
+        await page.request.delete(`/api/posts/${id}`);
+      }
+    }
+  });
+
   // 코드블록 — 언어가 있으면 서버에서 색칠해 내보낸다(클라 JS 없이).
   test("코드블록이 언어별로 색칠되고, 모르는 언어는 평문으로 나온다", async ({
     page,

@@ -337,6 +337,21 @@ body {
   }
 }
 
+/* 스크롤 리빌 — 요소가 화면에 들어오는 동안 위 fade-up이 진행된다.
+   CSS 스크롤 타임라인이라 JS가 0이고 서버 컴포넌트에 그냥 클래스만 붙이면 된다.
+   @supports 안에서만 시작 상태를 숨기는 것이 핵심 — 미지원 브라우저에서 이걸
+   빼먹으면 콘텐츠가 영구히 안 보인다. reduce 설정에서도 규칙 자체가 적용되지 않는다. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation-timeline: view();
+      /* 아래에서 올라오는 구간에만 매핑 — 첫 화면에 이미 있는 요소는 완료 상태다 */
+      animation-range: entry 10% entry 55%;
+    }
+  }
+}
+
 /* 별이 흐르는 강 — 강 라인이 그려진 뒤 별이 순차 등장(delay는 컴포넌트에서 지정) */
 .star-river-path {
   stroke-dasharray: 1;

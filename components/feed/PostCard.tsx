@@ -8,7 +8,7 @@ export function PostCard({ post }: { post: Post }) {
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className="group block border-b border-border py-6"
+      className="reveal group block border-b border-border py-6"
     >
       <div className="mb-2 flex flex-wrap items-center gap-3 text-sm text-muted">
         <time dateTime={post.date}>{formatDate(post.date)}</time>
