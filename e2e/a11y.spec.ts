@@ -118,6 +118,55 @@ for (const scheme of ["light", "dark"] as const) {
   });
 }
 
+test("본문 이미지가 크기와 지연로딩을 갖는다", async ({ page }) => {
+  // width·height가 없으면 이미지가 로드될 때 아래 본문이 밀린다(CLS).
+  expect(
+    (
+      await page.request.post("/api/auth/login", {
+        data: { password: "stella-dev" },
+      })
+    ).ok(),
+  ).toBe(true);
+
+  let id: string | undefined;
+  try {
+    const res = await page.request.post("/api/posts", {
+      data: {
+        title: "E2E 이미지 속성",
+        tags: [],
+        status: "published",
+        body: {
+          type: "doc",
+          content: [
+            {
+              type: "image",
+              attrs: {
+                src: "/api/media/none.png",
+                alt: "설명",
+                width: 800,
+                height: 600,
+              },
+            },
+          ],
+        },
+      },
+    });
+    expect(res.status()).toBe(201);
+    const post = (await res.json()) as { id: string; slug: string };
+    id = post.id;
+
+    await page.goto(`/blog/${encodeURIComponent(post.slug)}`);
+    const img = page.locator(".prose-stella img").first();
+    await expect(img).toHaveAttribute("width", "800");
+    await expect(img).toHaveAttribute("height", "600");
+    await expect(img).toHaveAttribute("loading", "lazy");
+    await expect(img).toHaveAttribute("decoding", "async");
+    await expect(img).toHaveAttribute("alt", "설명");
+  } finally {
+    if (id) await page.request.delete(`/api/posts/${id}`);
+  }
+});
+
 test("좁은 화면에서 페이지가 가로로 넘치지 않는다", async ({ page }) => {
   // 표·코드블록은 자기 안에서 스크롤되어야 하고, 페이지 자체는 넘치면 안 된다.
   await page.setViewportSize({ width: 360, height: 640 });

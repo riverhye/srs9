@@ -172,6 +172,9 @@ test.describe("/stella/write 이미지·콜아웃", () => {
     await expect
       .poll(() => img.evaluate((el: HTMLImageElement) => el.naturalWidth))
       .toBeGreaterThan(0);
+    // 크기가 함께 기록돼야 읽기 화면에서 본문이 밀리지 않는다(CLS). 샘플은 1×1.
+    await expect(img).toHaveAttribute("width", "1");
+    await expect(img).toHaveAttribute("height", "1");
   });
 
   test("콜아웃 버튼이 블록을 callout으로 감싸고 active로 표시된다", async ({

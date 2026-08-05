@@ -38,15 +38,23 @@ function RenderNode({ node }: { node: JSONContent }): ReactNode {
       return <ol>{renderNodes(node.content)}</ol>;
     case "listItem":
       return <li>{renderNodes(node.content)}</li>;
-    case "image":
-      // 본문 이미지는 임의 외부 URL(R2 업로드는 3c) — next/image 대신 <img>
+    case "image": {
+      // 본문 이미지는 R2(/api/media/…)와 외부 링크가 섞여 있어 next/image 대신 <img>.
+      // width·height를 내면 로드 전에 공간이 예약되어 레이아웃이 밀리지 않는다(CLS).
+      const w = Number(node.attrs?.width) || undefined;
+      const h = Number(node.attrs?.height) || undefined;
       return (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={String(node.attrs?.src ?? "")}
           alt={String(node.attrs?.alt ?? "")}
+          width={w}
+          height={h}
+          loading="lazy"
+          decoding="async"
         />
       );
+    }
     // 표 — 좁은 화면에서 넘칠 수 있어 스크롤 컨테이너로 감싼다(스타일은 globals.css).
     case "table":
       return (

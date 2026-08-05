@@ -14,6 +14,7 @@
 //   node scripts/import-velog.mjs --probe        변환 결과만 출력(저장 안 함)
 //   node scripts/import-velog.mjs --limit 1      1편만 실제 저장
 //   node scripts/import-velog.mjs                대상 전체 저장
+//   node scripts/import-velog.mjs --fix-dims     저장된 글의 이미지에 width·height 기록
 import { readFile, writeFile } from "node:fs/promises";
 
 import { chromium } from "@playwright/test";
@@ -204,6 +205,67 @@ function plainLength(md) {
     .replace(/\s+/g, "").length;
 }
 
+// --- 이미지 크기 보정 ---
+
+// 저장된 본문의 image 노드에 width·height를 채운다. 이게 없으면 이미지가 로드될 때
+// 아래 본문이 밀린다(CLS). 크기는 브라우저에 실제로 띄워 재는 게 가장 정확하다.
+async function fixImageDims(page, request) {
+  const posts = await (await request.get(`${BASE}/api/posts`)).json();
+  await page.goto(BASE); // 상대 주소(/api/media/…)를 로드할 오리진 확보
+  let touched = 0;
+  let measured = 0;
+
+  for (const post of posts) {
+    const doc = JSON.parse(post.body);
+    const images = [];
+    const walk = (n) => {
+      if (n.type === "image") images.push(n);
+      n.content?.forEach(walk);
+    };
+    doc.content?.forEach(walk);
+    const targets = images.filter((n) => !n.attrs?.width || !n.attrs?.height);
+    if (!targets.length) continue;
+
+    for (const node of targets) {
+      const size = await page.evaluate(
+        (src) =>
+          new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () =>
+              resolve({ w: img.naturalWidth, h: img.naturalHeight });
+            img.onerror = () => resolve(null);
+            img.src = src;
+          }),
+        node.attrs.src,
+      );
+      if (!size?.w) {
+        console.warn(`    ! 크기를 못 읽음: ${node.attrs.src}`);
+        continue;
+      }
+      node.attrs.width = size.w;
+      node.attrs.height = size.h;
+      measured++;
+    }
+
+    // PUT은 slug·date를 건드리지 않는다 — 태그는 그대로 넘겨 유지한다.
+    const res = await request.put(`${BASE}/api/posts/${post.id}`, {
+      data: {
+        title: post.title,
+        tags: JSON.parse(post.tags),
+        status: post.status,
+        body: doc,
+      },
+    });
+    if (res.ok()) {
+      touched++;
+      console.log(`  ${post.slug} — 이미지 ${targets.length}개`);
+    } else {
+      console.warn(`  ! 저장 실패 ${res.status()}: ${post.slug}`);
+    }
+  }
+  console.log(`\n글 ${touched}편 · 이미지 ${measured}개에 크기 기록`);
+}
+
 // --- 실행 ---
 
 const only = value("--slug", null); // 한 편만 다룰 때(확인용)
@@ -225,6 +287,13 @@ const login = await context.request.post(`${BASE}/api/auth/login`, {
 if (!login.ok()) {
   await browser.close();
   throw new Error(`로그인 실패 ${login.status()} — dev 서버와 비밀번호 확인`);
+}
+
+// 이미지 크기만 채우고 끝내는 모드 — 이관과 무관하게 언제든 돌릴 수 있다.
+if (flag("--fix-dims")) {
+  await fixImageDims(page, context.request);
+  await browser.close();
+  process.exit(0);
 }
 
 const uploaded = await loadImageMap(); // 같은 이미지는 한 번만 올린다

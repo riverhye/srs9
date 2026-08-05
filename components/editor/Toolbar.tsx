@@ -15,6 +15,24 @@ type ToolbarProps = {
 
 const HEADING_LEVELS = [1, 2, 3, 4] as const;
 
+// 고른 파일의 원본 픽셀 크기. 못 읽으면 크기 없이 넣는다(삽입 자체는 막지 않는다).
+function readImageSize(
+  file: File,
+): Promise<{ width?: number; height?: number }> {
+  return new Promise((resolve) => {
+    const objectUrl = URL.createObjectURL(file);
+    const img = new Image();
+    const done = (v: { width?: number; height?: number }) => {
+      URL.revokeObjectURL(objectUrl);
+      resolve(v);
+    };
+    img.onload = () =>
+      done({ width: img.naturalWidth, height: img.naturalHeight });
+    img.onerror = () => done({});
+    img.src = objectUrl;
+  });
+}
+
 export function Toolbar({ editor }: ToolbarProps) {
   // 이미지 파일 업로드용 숨은 input
   const fileRef = useRef<HTMLInputElement>(null);
@@ -69,7 +87,13 @@ export function Toolbar({ editor }: ToolbarProps) {
         return;
       }
       const { url } = (await res.json()) as { url: string };
-      editor.chain().focus().setImage({ src: url }).run();
+      // 크기를 함께 넣는다 — 없으면 읽기 화면에서 이미지가 로드될 때 본문이 밀린다(CLS).
+      const dims = await readImageSize(file);
+      editor
+        .chain()
+        .focus()
+        .setImage({ src: url, ...dims })
+        .run();
     } catch {
       alert("업로드에 실패했습니다");
     } finally {

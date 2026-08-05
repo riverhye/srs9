@@ -163,7 +163,11 @@ See `docs/CONVENTIONS.md` for coding conventions.
   - **코드 주석 색이 WCAG AA 미달이었다** — 라이트 2.67:1 / 다크 3.51:1. `#6b6b6b`·`#8a8a94`로 고쳐 5.1:1·5.4:1. 주석은 이탤릭이라 여유를 뒀다
   - `e2e/a11y.spec.ts` — 본문·제목·코드 4갈래 대비를 라이트/다크 양쪽에서 재고, 360px 가로 넘침을 확인. 선택자가 안 잡히면 조용히 통과하는 것도 막는다
   > dev 서버가 CSS 변경을 부분만 반영한 적이 있다(라이트는 새 값, 다크는 옛 값). 색 수치가 안 맞으면 서버 재시작부터.
-- [ ] Accessibility (a11y), SEO, performance (Core Web Vitals)
+- [x] Accessibility (a11y), performance — done 2026-08-05
+  - 진단 결과 이미 정상이던 것: 랜드마크(header·main·footer), 페이지마다 h1 1개, 헤딩 순서 건너뜀 0, 라벨 없는 입력 0, 이름 없는 링크 0, `lang="ko"`
+  - **본문 이미지에 width·height가 없어 로드될 때 본문이 밀렸다(CLS)** → 렌더러가 크기·`loading="lazy"`·`decoding="async"`를 내보내고, 이관 도구 `--fix-dims`로 기존 14편 52개 이미지에 크기를 기록(브라우저에 띄워 실측). 에디터 업로드도 파일 크기를 재서 함께 저장 — 안 그러면 새 글마다 보정을 다시 돌려야 한다
+  - `--fix-dims`는 PUT을 쓰므로 slug·발행일을 건드리지 않고 태그도 그대로 넘겨 유지한다
+  - 남은 것: **이미지 대체 텍스트(alt) 55개** — Velog 원본에 alt가 2개뿐이라(그마저 "설명" 수준) 이관으로는 채울 수 없다. 지금은 빈 alt라 스크린리더가 건너뛴다. Claire가 쓰거나, 에디터에 alt 입력을 붙여 앞으로 쓰는 글부터 채우는 방법이 있다
 - [ ] Prettier config + format-on-save
 
 ### ⬜ 9. Deploy (Cloudflare)
