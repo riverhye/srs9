@@ -15,7 +15,7 @@
      highlight.js 클래스에 매핑하는 규칙은 .prose-stella .hljs-* 쪽에 있다. */
   --code-keyword: #7c3aed; /* 키워드·타입·리터럴 */
   --code-string: #0f766e; /* 문자열·숫자·정규식 */
-  --code-comment: #9a9aa3; /* 주석 */
+  --code-comment: #6b6b6b; /* 주석 — 이탤릭이라 대비에 여유를 둔다 */
   --code-name: #b45309; /* 함수·속성·변수 이름 */
 }
 
@@ -34,7 +34,7 @@
 
     --code-keyword: #c4b5fd;
     --code-string: #5eead4;
-    --code-comment: #6b6b75;
+    --code-comment: #8a8a94;
     --code-name: #fbbf24;
   }
 }

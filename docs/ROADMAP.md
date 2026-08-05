@@ -157,7 +157,12 @@ See `docs/CONVENTIONS.md` for coding conventions.
   - 이미지 자산은 Claire 제작: `opengraph-image.png`(1200×630) · `favicon.ico`(16·32·48) · `icon.svg` · `apple-icon.png`(180) · alt 텍스트
   - `e2e/meta.spec.ts` — 태그는 화면에 안 보여서 눈으로 못 잡는다. 위 두 실수(제목 중복·og:image 누락)를 여기서 막는다
   - 글별 동적 OG 이미지는 보류: 글자 그리는 엔진이 폰트를 내장하지 않아 한글 폰트를 매 요청 읽어야 하고, Workers에서 되는지 확인하려면 `open-next.config.ts`(Stage 9)가 먼저 필요하다
-- [ ] Responsive pass, dark mode finish
+- [x] Responsive pass, dark mode finish — done 2026-08-05
+  - 반응형은 손댈 게 없었다: 360·768·1280에서 홈·목록·글(표+코드)·방명록 모두 가로 넘침 0. 표·코드블록은 자기 컨테이너에서 스크롤된다
+  - 색은 전부 토큰 사용(하드코딩 없음). `ColorPicker`의 hex 5개는 사용자가 본문에 고르는 팔레트라 예외
+  - **코드 주석 색이 WCAG AA 미달이었다** — 라이트 2.67:1 / 다크 3.51:1. `#6b6b6b`·`#8a8a94`로 고쳐 5.1:1·5.4:1. 주석은 이탤릭이라 여유를 뒀다
+  - `e2e/a11y.spec.ts` — 본문·제목·코드 4갈래 대비를 라이트/다크 양쪽에서 재고, 360px 가로 넘침을 확인. 선택자가 안 잡히면 조용히 통과하는 것도 막는다
+  > dev 서버가 CSS 변경을 부분만 반영한 적이 있다(라이트는 새 값, 다크는 옛 값). 색 수치가 안 맞으면 서버 재시작부터.
 - [ ] Accessibility (a11y), SEO, performance (Core Web Vitals)
 - [ ] Prettier config + format-on-save
 
