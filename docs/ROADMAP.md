@@ -146,7 +146,15 @@ See `docs/CONVENTIONS.md` for coding conventions.
 ### ⬜ 8. Polish
 - [x] Code block syntax highlighting — done 2026-08-04. `highlight.js/lib/common`을 서버(PostBody는 RSC)에서 돌려 색칠된 마크업을 내보낸다 → 클라 JS 0. shiki 대신 고른 이유: async라 동기 재귀 렌더러를 바꿔야 했다. hljs 기본 테마는 안 쓰고 클래스에 사이트 팔레트를 매핑(색은 키워드·문자열·주석·이름 네 갈래, 다크모드 별도). 이관 글의 코드블록 130개 중 언어가 붙은 107개가 대상
 - [ ] Scroll animation / smoother section transitions
-- [ ] Metadata / OG images / sitemap / robots
+- [x] Metadata / OG images / sitemap / robots — done 2026-08-05
+  - `metadataBase`(기본 `https://srs9.com`, `NEXT_PUBLIC_SITE_URL`로 덮어쓰기) — 공유 카드 이미지는 절대 주소여야 외부 서비스가 읽는다
+  - 제목·설명·OG·Twitter 기본값은 **루트 레이아웃 한 곳**. `(site)/layout.tsx`에도 title 템플릿이 있어 홈 제목이 `srs9 · srs9`가 됐다 → 중복 제거
+  - 글 상세: 제목·발췌(160자)·발행일·태그·canonical. 자체 `openGraph`를 정의하면 파일 기반 이미지가 자동으로 안 붙어서 `parent`의 images를 물려받는다(공식 패턴)
+  - `getPublishedPostBySlug`를 React `cache`로 — `generateMetadata`와 본문이 같은 글을 두 번 읽고 있었다
+  - `app/sitemap.ts`(발행글만, 한글 slug 인코딩) · `app/robots.ts`(`/stella`·`/api` 제외)
+  - 이미지 자산은 Claire 제작: `opengraph-image.png`(1200×630) · `favicon.ico`(16·32·48) · `icon.svg` · `apple-icon.png`(180) · alt 텍스트
+  - `e2e/meta.spec.ts` — 태그는 화면에 안 보여서 눈으로 못 잡는다. 위 두 실수(제목 중복·og:image 누락)를 여기서 막는다
+  - 글별 동적 OG 이미지는 보류: 글자 그리는 엔진이 폰트를 내장하지 않아 한글 폰트를 매 요청 읽어야 하고, Workers에서 되는지 확인하려면 `open-next.config.ts`(Stage 9)가 먼저 필요하다
 - [ ] Responsive pass, dark mode finish
 - [ ] Accessibility (a11y), SEO, performance (Core Web Vitals)
 - [ ] Prettier config + format-on-save

@@ -25,8 +25,8 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://srs9.com"),
   title: {
     default: SITE_NAME,
-    // 하위 페이지 제목은 "글 제목 — srs9" 형태가 된다
-    template: `%s — ${SITE_NAME}`,
+    // 하위 페이지 제목은 "글 제목 · srs9" 형태가 된다
+    template: `%s · ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
   openGraph: {

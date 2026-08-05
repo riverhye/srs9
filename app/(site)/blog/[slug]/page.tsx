@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -13,17 +13,19 @@ import {
 } from "@/lib/posts";
 
 // slug는 Next가 이미 퍼센트 디코딩해 넘겨준다(한글 그대로 매칭).
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata(
+  { params }: { params: Promise<{ slug: string }> },
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPublishedPostBySlug(
     decodeURIComponent(slug).normalize("NFC"),
   );
   if (!post) return { title: "Blog" };
 
+  // openGraph를 여기서 정의하면 파일 기반 이미지(app/opengraph-image.png)가
+  // 자동으로 붙지 않는다 — 부모가 이미 해석한 이미지를 그대로 물려받는다.
+  const images = (await parent).openGraph?.images ?? [];
   // 발췌를 공유 카드·검색 결과 설명으로 쓴다(본문 첫 문단 평문).
   const description = excerptOf(post, 160);
   const canonical = `/blog/${encodeURIComponent(post.slug)}`;
@@ -38,6 +40,7 @@ export async function generateMetadata({
       url: canonical,
       publishedTime: post.date,
       tags: parseTags(post),
+      images,
     },
   };
 }
