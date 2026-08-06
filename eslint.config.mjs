@@ -1,6 +1,7 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
+import prettier from "eslint-config-prettier";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 
 const eslintConfig = defineConfig([
@@ -45,6 +46,9 @@ const eslintConfig = defineConfig([
       ],
     },
   },
+  // Prettier와 겹치는 포맷 규칙을 끈다 — 서식은 Prettier 한 곳에서만 정한다.
+  // 다른 설정보다 뒤에 와야 앞의 규칙을 덮는다.
+  prettier,
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:

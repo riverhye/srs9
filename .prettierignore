@@ -1,0 +1,13 @@
+# 빌드 산출물
+.next/
+out/
+build/
+.wrangler/
+
+# 생성 파일 — 손으로 고치지 않으므로 정렬 대상이 아니다
+cloudflare-env.d.ts
+drizzle/meta/
+pnpm-lock.yaml
+
+# Velog 이관 도구 캐시
+scripts/.velog-*.json

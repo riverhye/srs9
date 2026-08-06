@@ -69,13 +69,17 @@ function Chip({
     <Link
       href={href}
       aria-current={active ? "page" : undefined}
-      className={
+      // 조각을 배열로 두고 합친다 — 템플릿 리터럴에 클래스를 이어붙이면
+      // Tailwind 정렬 플러그인이 문자열을 다듬으며 구분 공백을 없앨 수 있다.
+      className={[
+        "rounded-full px-4 py-1.5 text-sm",
         active
-          ? "rounded-full bg-accent px-4 py-1.5 text-sm font-medium text-accent-fg"
-          : `rounded-full border border-border px-4 py-1.5 text-sm text-muted transition-colors hover:bg-surface${
-              mono ? " font-mono" : ""
-            }`
-      }
+          ? "bg-accent font-medium text-accent-fg"
+          : "border border-border text-muted transition-colors hover:bg-surface",
+        mono ? "font-mono" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
     >
       {label}
     </Link>

@@ -32,6 +32,8 @@ jobs:
 
       - run: pnpm lint
 
+      - run: pnpm format:check
+
       # e2e는 로컬 D1(miniflare)을 쓰므로 스키마를 먼저 적용한다. R2는 빈 상태로 자동 생성.
       - run: pnpm db:migrate:local
 
