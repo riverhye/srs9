@@ -10,6 +10,10 @@ export const metadata: Metadata = {
   alternates: { canonical: "/guestbook" },
 };
 
+// 방문자가 남긴 글을 매번 읽어야 하므로 정적 생성 대상이 아니다.
+// 선언이 없으면 빌드가 프리렌더를 시도하다 D1 바인딩이 없어 실패한다.
+export const dynamic = "force-dynamic";
+
 export default async function GuestbookPage() {
   const [entries, owner] = await Promise.all([listEntries(), isOwner()]);
 

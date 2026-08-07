@@ -1,5 +1,6 @@
 # 빌드 산출물
 .next/
+.open-next/
 out/
 build/
 .wrangler/

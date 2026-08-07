@@ -1,8 +1,15 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "srs9",
+  // OpenNext가 빌드한 Worker와 정적 자산. 두 경로는 빌드 산출물이라 gitignore 대상.
+  "main": ".open-next/worker.js",
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS",
+  },
   "compatibility_date": "2025-03-01",
-  "compatibility_flags": ["nodejs_compat"],
+  // global_fetch_strictly_public — Worker 내부 fetch가 공개 경로를 타게 한다(어댑터 요구).
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   // D1: 로컬 dev(next dev via OpenNext)와 wrangler d1 --local이 공유하는 바인딩.
   // database_id는 배포(Stage 9) 때 실제 값으로 교체. --local 작업엔 placeholder면 충분.
   "d1_databases": [
